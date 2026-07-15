@@ -856,9 +856,12 @@
 
 <script>
 // Lazy module loader — loads aero.js and admin.js on demand
+// In production build, these are already bundled in app.min.js
 window._lazyModules={};
 window._loadModule=function(name){
   if(window._lazyModules[name])return Promise.resolve();
+  if(name==='admin'&&typeof initAdmin==='function'){window._lazyModules[name]=true;return Promise.resolve();}
+  if(name==='aero'&&typeof aeroDecode==='function'){window._lazyModules[name]=true;return Promise.resolve();}
   return new Promise(function(resolve,reject){
     var s=document.createElement('script');
     s.src=name+'.js';
@@ -977,7 +980,7 @@ window._loadModule=function(name){
     <button class="btn btn-primary" style="flex:2" onclick="closeTextEdit(true)">✓ Aplicar</button>
   </div>
 </div>
-<script src="app.min.js?v=1784145501946"></script>
+<script src="app.min.js?v=1784147183463"></script>
 <script>
 if('serviceWorker' in navigator){
   navigator.serviceWorker.register('./sw.js').catch(function(e){console.warn('SW failed',e);});
