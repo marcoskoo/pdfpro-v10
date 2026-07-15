@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<title>PDF Editor Pro – CORPAC AIS/ARO SPHI</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+<style>@import url(https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap);:root{--bg:#0f1013;--surf:#17191e;--s2:#1f2128;--s3:#272a35;--s4:#313542;--bdr:#3a3e4d;--acc:#4f8ef7;--acc2:#3a72d4;--accg:rgba(79,142,247,.14);--text:#dde0ea;--t2:#8590a4;--t3:#505a6e;--ok:#30c97e;--warn:#f5a623;--err:#f05050;--pur:#9f7aea;--sh:0 4px 18px rgba(0,0,0,.55);--sh2:0 8px 36px rgba(0,0,0,.75);--r:8px;--r2:12px}*{box-sizing:border-box;margin:0;padding:0}body{font-family:Inter,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:13px;-webkit-font-smoothing:antialiased}input,select,textarea{user-select:text!important;font-family:Inter,sans-serif}button{font-family:Inter,sans-serif;cursor:pointer}#adminLayer,#editorLayer,#loginLayer,#subLayer{position:fixed;inset:0;z-index:100;background:var(--bg);overflow-y:auto;display:none}#loginLayer{display:flex;align-items:center;justify-content:center;padding:20px}.login-wrap{width:100%;max-width:400px}.login-logo{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:28px}.login-ico{width:46px;height:46px;background:var(--acc);border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;color:#000;flex-shrink:0}.login-title{font-size:22px;font-weight:800}.login-title span{color:var(--acc)}.login-sub{font-size:11px;color:var(--t3);margin-top:2px}.login-card{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r2);padding:24px}.login-tabs{display:flex;border-bottom:1px solid var(--bdr);margin-bottom:20px}.ltab{flex:1;padding:9px;text-align:center;font-size:13px;font-weight:600;color:var(--t3);cursor:pointer;border-bottom:2px solid transparent;transition:.14s}.ltab.on{color:var(--acc);border-bottom-color:var(--acc)}.f-group{margin-bottom:14px}.f-label{font-size:10.5px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.6px;display:block;margin-bottom:5px}.f-input{width:100%;background:var(--s2);border:1.5px solid var(--bdr);border-radius:var(--r);color:var(--text);padding:10px 13px;font-size:13px;outline:0;transition:border-color .14s}.f-input:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(79,142,247,.1)}.f-select{width:100%;background:var(--s2);border:1.5px solid var(--bdr);border-radius:var(--r);color:var(--text);padding:10px 13px;font-size:13px;outline:0;transition:border-color .14s;cursor:pointer}.f-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.err-box{background:rgba(240,80,80,.1);border:1px solid rgba(240,80,80,.3);border-radius:var(--r);padding:9px 13px;font-size:12px;color:var(--err);margin-bottom:12px;display:none}.err-box.show{display:block}.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:10px 20px;border-radius:var(--r);border:none;font-weight:700;font-size:13px;cursor:pointer;transition:.15s;letter-spacing:.1px}.btn svg{width:15px;height:15px;flex-shrink:0}.btn-primary{background:var(--acc);color:#fff;width:100%;padding:12px}.btn-primary:hover{background:var(--acc2);transform:translateY(-1px)}.btn-ok{background:var(--ok);color:#000}.btn-ok:hover{background:#27b57a}.btn-warn{background:var(--warn);color:#000}.btn-err{background:var(--err);color:#fff}.btn-ghost{background:0 0;border:1.5px solid var(--bdr);color:var(--t2)}.btn-ghost:hover{color:var(--text);border-color:var(--acc)}.btn-sm{padding:6px 13px;font-size:12px}.btn-xs{padding:3px 9px;font-size:11px;border-radius:5px}.btn-full{width:100%}#subLayer{padding:24px 16px}.sub-wrap{max-width:900px;margin:0 auto}.sub-hdr{text-align:center;margin-bottom:28px}.sub-hdr h2{font-size:24px;font-weight:800;margin-bottom:6px}.sub-hdr p{color:var(--t2);font-size:13.5px}.plan-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;margin-bottom:24px}.plan-card{background:var(--surf);border:1.5px solid var(--bdr);border-radius:var(--r2);padding:22px;cursor:pointer;transition:.2s;position:relative}.plan-card:hover{border-color:var(--acc);transform:translateY(-3px);box-shadow:0 8px 28px rgba(79,142,247,.18)}.plan-card.featured{border-color:var(--acc)}.plan-popular{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--acc);color:#fff;font-size:10px;font-weight:700;padding:3px 14px;border-radius:20px;white-space:nowrap}.plan-name{font-size:17px;font-weight:800;margin-bottom:5px}.plan-price{font-size:30px;font-weight:800;line-height:1;margin-bottom:3px}.plan-price span{font-size:13px;color:var(--t2);font-weight:400}.plan-desc{font-size:11.5px;color:var(--t2);margin-bottom:14px}.plan-features{list-style:none;margin-bottom:18px}.plan-features li{font-size:12px;color:var(--t2);padding:4px 0;display:flex;align-items:center;gap:7px;border-bottom:1px solid rgba(58,62,77,.4)}.plan-features li:last-child{border:none}.plan-features li::before{content:"âœ“";color:var(--ok);font-weight:700;flex-shrink:0}.pay-section{max-width:480px;margin:0 auto}.pay-methods{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}.pay-method-btn{padding:8px 16px;border-radius:var(--r);border:1.5px solid var(--bdr);background:var(--s2);color:var(--t2);cursor:pointer;font-size:12.5px;font-weight:600;transition:.14s;display:flex;align-items:center;gap:7px}.pay-method-btn.on{border-color:var(--acc);color:var(--acc);background:var(--accg)}.pay-detail-box{background:var(--s2);border:1px solid var(--bdr);border-radius:var(--r);padding:14px;margin-bottom:12px;font-size:12.5px;color:var(--t2);white-space:pre-wrap;line-height:1.7}.secure-note{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--t3);justify-content:center;margin-top:10px}.admin-wrap{display:flex;min-height:100vh}.admin-nav{width:230px;background:var(--surf);border-right:1px solid var(--bdr);display:flex;flex-direction:column;flex-shrink:0;position:sticky;top:0;height:100vh;overflow-y:auto}.admin-nav-top{padding:16px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:10px}.admin-nav-ico{width:32px;height:32px;background:var(--acc);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:#000;flex-shrink:0}.an-item{display:flex;align-items:center;gap:10px;padding:9px 16px;color:var(--t2);cursor:pointer;transition:.12s;font-size:12.5px;border-left:3px solid transparent}.an-item:hover{background:var(--s2);color:var(--text)}.an-item.on{background:var(--s2);color:var(--acc);border-left-color:var(--acc);font-weight:600}.an-item svg{width:15px;height:15px;flex-shrink:0}.an-section{padding:8px 16px 3px;font-size:9.5px;color:var(--t3);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-top:8px}.admin-main{flex:1;padding:22px;min-width:0}.admin-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px}.page-title{font-size:20px;font-weight:800}.page-sub{font-size:11px;color:var(--t3);margin-top:2px}.stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:20px}.stat-card{background:var(--s2);border:1px solid var(--bdr);border-radius:var(--r);padding:14px;position:relative;overflow:hidden}.stat-card::before{content:"";position:absolute;top:0;left:0;right:0;height:2px}.sc-blue::before{background:var(--acc)}.sc-green::before{background:var(--ok)}.sc-warn::before{background:var(--warn)}.sc-pur::before{background:var(--pur)}.sc-label{font-size:10px;color:var(--t3);font-weight:700;text-transform:uppercase;letter-spacing:.7px;margin-bottom:6px}.sc-val{font-size:24px;font-weight:800;font-family:"JetBrains Mono",monospace;line-height:1;margin-bottom:3px}.sc-sub{font-size:11px;color:var(--t2)}.card{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r2);overflow:hidden;margin-bottom:18px}.card-hd{padding:12px 16px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;gap:10px}.card-title{font-size:13.5px;font-weight:700}.card-body{padding:16px}.data-table{width:100%;border-collapse:collapse}.data-table th{padding:8px 12px;text-align:left;font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.7px;border-bottom:1px solid var(--bdr);white-space:nowrap}.data-table td{padding:9px 12px;border-bottom:1px solid rgba(58,62,77,.4);font-size:12px;vertical-align:middle}.data-table tr:last-child td{border-bottom:none}.data-table tr:hover td{background:rgba(255,255,255,.02)}.badge{display:inline-flex;align-items:center;gap:3px;padding:2px 9px;border-radius:20px;font-size:10.5px;font-weight:700}.badge-ok{background:rgba(48,201,126,.12);color:var(--ok)}.badge-warn{background:rgba(245,166,35,.12);color:var(--warn)}.badge-err{background:rgba(240,80,80,.1);color:var(--err)}.badge-blue{background:var(--accg);color:var(--acc)}.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:2000;display:none;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(4px)}.modal-overlay.show{display:flex}.modal-box{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r2);width:100%;max-width:520px;max-height:90vh;overflow-y:auto;box-shadow:var(--sh2);animation:.2s mIn}@keyframes mIn{from{opacity:0;transform:scale(.96) translateY(8px)}to{opacity:1;transform:none}}.modal-hd{padding:14px 18px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:10px;position:sticky;top:0;background:var(--surf);z-index:1}.modal-hd-title{font-size:14px;font-weight:700;flex:1}.modal-hd-x{width:26px;height:26px;border-radius:6px;background:0 0;border:1px solid var(--bdr);color:var(--t2);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center}.modal-hd-x:hover{background:rgba(240,80,80,.15);color:var(--err)}.modal-body{padding:18px}.modal-foot{padding:12px 18px;border-top:1px solid var(--bdr);display:flex;gap:8px;justify-content:flex-end;background:var(--s2)}.sede-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}.sede-card{background:var(--s2);border:1.5px solid var(--bdr);border-radius:var(--r);padding:14px;position:relative;transition:.14s}.sede-card:hover{border-color:var(--acc)}.pstamp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}.pstamp-card{background:var(--s2);border:1.5px solid var(--bdr);border-radius:var(--r);overflow:hidden;position:relative;transition:.14s}.pstamp-card:hover{border-color:var(--acc)}.pstamp-card img{width:100%;height:80px;object-fit:contain;background:#fff;padding:6px;display:block}.pstamp-name{font-size:11px;color:var(--t2);padding:6px 8px;border-top:1px solid var(--bdr);text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pstamp-card .del-btn{position:absolute;top:4px;right:4px;background:rgba(240,80,80,.88);color:#fff;border:none;border-radius:5px;width:22px;height:22px;font-size:13px;cursor:pointer;display:none;align-items:center;justify-content:center;font-weight:700}.pstamp-card:hover .del-btn{display:flex}.search-input{background:var(--s2);border:1px solid var(--bdr);border-radius:var(--r);color:var(--text);padding:7px 12px;font-size:12px;outline:0;width:220px}.tab-bar{display:flex;border-bottom:1px solid var(--bdr);margin-bottom:18px;overflow-x:auto}.tab-bar::-webkit-scrollbar{display:none}.tab-btn{padding:9px 16px;font-size:12.5px;font-weight:600;color:var(--t3);cursor:pointer;border-bottom:2px solid transparent;transition:.13s;white-space:nowrap}.tab-btn.on{color:var(--acc);border-bottom-color:var(--acc)}.tab-btn:hover:not(.on){color:var(--t2)}.drive-section{background:var(--s2);border:1px solid var(--bdr);border-radius:var(--r);padding:16px;margin-bottom:14px}.drive-connected{background:rgba(48,201,126,.08);border-color:rgba(48,201,126,.3)}.drive-folder-tree{background:var(--s3);border-radius:var(--r);padding:12px;font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--t2);line-height:1.8}.drive-folder{color:var(--acc);font-weight:600}.drive-subfolder{color:var(--ok);margin-left:20px}.prog-bar{height:5px;background:var(--bdr);border-radius:3px;overflow:hidden;margin-top:6px}.prog-fill{height:100%;background:var(--acc);border-radius:3px;transition:width .3s}#editorLayer{display:none;flex-direction:column;height:100vh}.etopbar{height:48px;background:var(--surf);border-bottom:1px solid var(--bdr);display:flex;align-items:center;padding:0 8px;gap:4px;flex-shrink:0;overflow-x:auto}.doc-tabs-bar{display:flex;align-items:stretch;background:var(--bg);border-bottom:1px solid var(--bdr);height:34px;overflow-x:auto;flex-shrink:0;scrollbar-width:none}.doc-tabs-bar::-webkit-scrollbar{display:none}.doc-tab{display:flex;align-items:center;gap:6px;padding:0 10px 0 12px;border-right:1px solid var(--bdr);font-size:11.5px;color:var(--t2);cursor:pointer;white-space:nowrap;min-width:0;max-width:180px;background:var(--bg);transition:background .12s;flex-shrink:0;position:relative}.doc-tab:hover{background:var(--s2);color:var(--text)}.doc-tab.active{background:var(--surf);color:var(--text);font-weight:600}.doc-tab.active::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--acc)}.doc-tab-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:120px}.doc-tab-close{width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--t3);flex-shrink:0;margin-left:2px}.doc-tab-close:hover{background:rgba(240,80,80,.2);color:var(--err)}.doc-tab-add{display:flex;align-items:center;justify-content:center;width:34px;border-right:1px solid var(--bdr);color:var(--t3);cursor:pointer;font-size:16px;flex-shrink:0}.doc-tab-add:hover{background:var(--s2);color:var(--acc)}.etopbar::-webkit-scrollbar{display:none}.etb-logo{display:flex;align-items:center;gap:8px;padding:0 10px;border-right:1px solid var(--bdr);height:100%;flex-shrink:0;margin-right:4px}.etb-logo-ico{width:28px;height:28px;background:var(--acc);border-radius:7px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#000}.etb-logo-txt{font-size:13px;font-weight:800}.etb-logo-txt span{color:var(--acc)}.etb-btn{display:flex;align-items:center;gap:5px;padding:5px 11px;background:0 0;border:1px solid transparent;border-radius:6px;color:var(--t2);font-size:12px;cursor:pointer;transition:.14s;white-space:nowrap;flex-shrink:0}.etb-btn:hover{background:var(--s3);color:var(--text);border-color:var(--bdr)}.etb-btn.pri{background:var(--ok);color:#000;font-weight:700;border-color:var(--ok)}.etb-btn.acc{background:var(--acc);color:#fff;font-weight:700;border-color:var(--acc)}.etb-btn svg{width:13px;height:13px;flex-shrink:0}.etb-sep{width:1px;height:22px;background:var(--bdr);flex-shrink:0;margin:0 2px}.etb-user{display:flex;align-items:center;gap:8px;padding:4px 10px;margin-left:auto;flex-shrink:0;color:var(--t2);font-size:12px}.etb-user-ico{width:26px;height:26px;border-radius:50%;background:var(--acc);color:#000;font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}.eribbon{height:56px;background:var(--surf);border-bottom:1px solid var(--bdr);display:flex;align-items:center;padding:0 6px;gap:1px;flex-shrink:0;overflow-x:auto}.eribbon::-webkit-scrollbar{display:none}.erg{display:flex;align-items:center;gap:2px;padding:0 5px;border-right:1px solid var(--bdr);flex-shrink:0}.erg:last-child{border-right:none}.rb{width:46px;height:44px;border-radius:6px;border:1.5px solid transparent;background:0 0;color:var(--t2);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;transition:.13s;flex-shrink:0}.rb:hover{background:var(--s3);color:var(--text);border-color:var(--bdr)}.rb.on{background:var(--accg);color:var(--acc);border-color:var(--acc)}.rb svg{width:17px;height:17px}.rb-lbl{font-size:8.5px;font-weight:600;white-space:nowrap}.rv{width:1px;height:36px;background:var(--bdr);margin:0 3px;flex-shrink:0}.emain{display:flex;flex:1;overflow:hidden}.elside{width:46px;background:var(--surf);border-right:1px solid var(--bdr);display:flex;flex-direction:column;align-items:center;padding:6px 0;gap:2px;flex-shrink:0;overflow-y:auto}.elside::-webkit-scrollbar{display:none}.els{width:34px;height:34px;border-radius:7px;border:1.5px solid transparent;background:0 0;color:var(--t3);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.13s;position:relative;flex-shrink:0}.els:hover{background:var(--s3);color:var(--t2)}.els.on{background:var(--accg);color:var(--acc);border-color:var(--acc)}.els svg{width:15px;height:15px}.els .tip{position:absolute;left:40px;background:var(--s2);color:var(--text);font-size:11px;padding:4px 8px;border-radius:5px;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .13s;z-index:300;border:1px solid var(--bdr);top:50%;transform:translateY(-50%)}.els:hover .tip{opacity:1}.eldiv{width:22px;height:1px;background:var(--bdr);margin:4px 0}.eviewer{flex:1;display:flex;flex-direction:column;overflow:hidden;background:#0b0c0e;position:relative}.evtb{background:var(--surf);border-bottom:1px solid var(--bdr);padding:5px 10px;display:flex;align-items:center;gap:7px;flex-shrink:0}.zb{width:23px;height:23px;border-radius:5px;border:1px solid var(--bdr);background:var(--s2);color:var(--t2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;font-family:monospace}.zb:hover{background:var(--s3);color:var(--text)}.zval{font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--t2);min-width:42px;text-align:center;cursor:pointer}.pnb{background:var(--s2);border:1px solid var(--bdr);border-radius:5px;color:var(--t2);padding:3px 10px;font-size:12px;cursor:pointer;transition:.12s}.pnb:hover{background:var(--s3);color:var(--text)}.pnb:disabled{opacity:.28;cursor:not-allowed}.pi{width:34px;text-align:center;background:var(--s3);border:1px solid var(--bdr);border-radius:5px;color:var(--text);font-family:"JetBrains Mono",monospace;font-size:12px;padding:3px;outline:0}.evvs{width:1px;height:22px;background:var(--bdr);flex-shrink:0}.tlbl{font-size:11px;color:var(--t3);margin-left:auto;font-style:italic}.evscroll{flex:1;overflow:auto;display:flex;flex-direction:column;align-items:center;padding:16px;gap:14px}.evscroll::-webkit-scrollbar{width:5px}.evscroll::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:3px}.drop-zone{flex:1;display:flex;align-items:center;justify-content:center;width:100%}.drop-box{border:2px dashed var(--bdr);border-radius:var(--r2);padding:52px 64px;text-align:center;cursor:pointer;transition:.2s;background:var(--surf);max-width:460px;width:100%}.drop-box.dg,.drop-box:hover{border-color:var(--acc);background:rgba(79,142,247,.04)}.drop-di{font-size:44px;margin-bottom:12px}.drop-dt{font-size:20px;font-weight:700;margin-bottom:5px}.drop-ds{color:var(--t2);font-size:13px}.drop-ds em{color:var(--acc);font-style:normal}.drop-tags{display:flex;gap:6px;margin-top:12px;justify-content:center;flex-wrap:wrap}.dtag{padding:3px 10px;background:var(--s3);border:1px solid var(--bdr);border-radius:100px;font-size:10px;font-family:"JetBrains Mono",monospace;color:var(--t2)}.pw{position:relative;box-shadow:var(--sh);border:1px solid var(--bdr);border-radius:2px;flex-shrink:0}.pdf-text-layer{position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none;overflow:hidden;line-height:1;user-select:none}.pdf-text-layer span{position:absolute;white-space:pre;transform-origin:0% 0%;color:transparent;pointer-events:none;border-radius:2px;transition:background .08s}.pdf-text-layer.editable{z-index:5}.pdf-text-layer.editable span{pointer-events:auto;cursor:text}.pdf-text-layer.editable span:hover{background:rgba(79,142,247,.12)}.pdf-text-layer span.para-hover-group{background:rgba(79,142,247,.1);outline:rgba(79,142,247,.4) solid 1px}.pdf-text-layer span.edited{background:rgba(255,255,180,.25)}.pdf-text-layer span.tts-highlight{background:rgba(255,214,0,.5)!important}.pdf-text-layer span.tts-active{background:rgba(255,140,0,.75)!important;box-shadow:0 0 0 2px rgba(255,140,0,.4)}#paraInlineEditor{position:absolute;z-index:20;box-sizing:border-box;border:2px solid rgba(79,142,247,.8);border-radius:3px;background:rgba(255,255,255,.97);outline:0;overflow:hidden;resize:none;line-height:inherit;padding:0;margin:0;font-kerning:none;display:none;word-break:break-word;white-space:pre-wrap;box-shadow:0 4px 24px rgba(0,0,0,.3)}#paraInlineEditor:focus{border-color:var(--acc,#4f8ef7);box-shadow:0 0 0 3px rgba(79,142,247,.2),0 4px 24px rgba(0,0,0,.3)}#paraEditorWrap{position:absolute;z-index:19;pointer-events:none;display:none}.text-edit-modal{position:fixed;z-index:10000;background:var(--s1);border:1px solid var(--bdr);border-radius:var(--r);box-shadow:0 12px 40px rgba(0,0,0,.5);padding:16px;min-width:320px;max-width:500px}.text-edit-modal textarea{width:100%;box-sizing:border-box;background:var(--s2);border:1px solid var(--bdr);border-radius:6px;color:var(--text);padding:8px;resize:vertical;font-size:13px;min-height:80px}.text-edit-toolbar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;align-items:center}.text-edit-toolbar input,.text-edit-toolbar select{background:var(--s2);border:1px solid var(--bdr);border-radius:5px;color:var(--text);padding:3px 6px;font-size:12px}.teb{background:var(--s2);border:1px solid var(--bdr);border-radius:5px;color:var(--text);padding:3px 8px;font-size:12px;cursor:pointer;font-weight:700}.teb:hover{background:var(--s3)}.teb.on{background:var(--acc);color:#000;border-color:var(--acc)}#paraEditModal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:10001;background:#1e2130;border:1px solid rgba(255,255,255,.1);border-radius:12px;box-shadow:0 24px 64px rgba(0,0,0,.7);padding:0;width:min(800px,96vw);height:min(640px,92vh);display:none;flex-direction:column;overflow:hidden}#paraEditModal .pe-head{padding:14px 20px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;background:#171929}#paraEditModal .pe-toolbar{padding:8px 14px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;gap:5px;flex-wrap:wrap;align-items:center;flex-shrink:0;background:#1a1d2e}#paraEditModal .pe-toolbar input[type=number],#paraEditModal .pe-toolbar select{background:#252840;border:1px solid rgba(255,255,255,.12);border-radius:6px;color:#e8eaf6;padding:4px 8px;font-size:12px;height:30px}#paraEditModal .pe-toolbar input[type=color]{width:30px;height:30px;padding:2px;border-radius:6px;border:1px solid rgba(255,255,255,.15);background:#252840;cursor:pointer}#paraEditModal .pe-body{padding:14px 16px;display:flex;gap:14px;flex:1;overflow:hidden;min-height:0}#paraEditModal .pe-col{flex:1;display:flex;flex-direction:column;gap:5px;min-width:0}#paraEditModal .pe-col label{font-size:10px;font-weight:700;color:rgba(255,255,255,.4);letter-spacing:.8px;text-transform:uppercase}#paraEditModal .pe-editor{flex:1;background:#252840;border:1.5px solid rgba(79,142,247,.35);border-radius:8px;padding:12px;font-size:13.5px;color:#e8eaf6;resize:none;line-height:1.7;font-family:inherit;outline:0;min-height:0}#paraEditModal .pe-editor:focus{border-color:rgba(79,142,247,.7);box-shadow:0 0 0 3px rgba(79,142,247,.1)}#paraEditModal .pe-preview-wrap{flex:1;background:#fff;border:1.5px solid rgba(255,255,255,.12);border-radius:8px;overflow:auto;position:relative;min-height:0;box-shadow:inset 0 2px 8px rgba(0,0,0,.3)}#paraEditModal .pe-preview-canvas{display:block;width:100%;height:auto}#paraEditModal .pe-foot{padding:12px 16px;border-top:1px solid rgba(255,255,255,.08);display:flex;gap:8px;justify-content:flex-end;flex-shrink:0;background:#171929}.pe-teb{background:#252840;border:1px solid rgba(255,255,255,.15);border-radius:6px;color:#e8eaf6;padding:4px 10px;font-size:12px;cursor:pointer;height:30px;min-width:30px;display:flex;align-items:center;justify-content:center}.pe-teb:hover{background:#2e3350}.pe-teb.on{background:var(--acc,#4f8ef7);color:#000;border-color:var(--acc,#4f8ef7)}#paraSelRect{position:fixed;border:2px solid var(--acc);background:rgba(79,142,247,.08);pointer-events:none;display:none;z-index:1000}.pw canvas{display:block}.acv{position:absolute;top:0;left:0;touch-action:none;z-index:2}.erpanel{width:260px;background:var(--surf);border-left:1px solid var(--bdr);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}.erpanel::-webkit-scrollbar{width:4px}.erpanel::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:2px}.ertabs{display:flex;border-bottom:1px solid var(--bdr);flex-shrink:0}.ertab{flex:1;padding:8px 3px;text-align:center;font-size:9.5px;font-weight:700;color:var(--t3);cursor:pointer;border-bottom:2px solid transparent;letter-spacing:.4px;text-transform:uppercase}.ertab.on{color:var(--acc);border-bottom-color:var(--acc)}.ersec{padding:11px;border-bottom:1px solid var(--bdr)}.ersec-title{font-size:9.5px;font-weight:700;color:var(--t3);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}.swrow{display:flex;gap:4px;flex-wrap:wrap;margin-top:4px}.sw{width:20px;height:20px;border-radius:50%;cursor:pointer;border:2.5px solid transparent;transition:.12s;flex-shrink:0}.sw.on{border-color:#fff;transform:scale(1.15)}.ctrlrow{display:flex;align-items:center;gap:7px;margin-top:6px}.ctrlrow label{font-size:10.5px;color:var(--t2);min-width:60px}.cval{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--t3);min-width:26px;text-align:right}input[type=range]{flex:1;height:3px;appearance:none;background:var(--bdr);border-radius:2px;outline:0;cursor:pointer}input[type=range]::-webkit-slider-thumb{appearance:none;width:12px;height:12px;border-radius:50%;background:var(--acc);cursor:pointer}.fsel{background:var(--s2);border:1px solid var(--bdr);border-radius:5px;color:var(--text);font-size:11.5px;padding:4px 7px;width:100%;outline:0}.chpass-form{padding:12px;border-bottom:1px solid var(--bdr)}.sello-panel{padding:11px;border-bottom:1px solid var(--bdr)}.sello-preview-box{border:2.5px solid #c00000;border-radius:7px;padding:8px 10px;margin-bottom:10px;text-align:center;font-family:Inter,sans-serif}.sig-lib-grid{display:flex;flex-direction:column;gap:0}.sig-card{border-radius:8px;overflow:hidden;background:var(--s2);position:relative;transition:border-color .13s;margin-bottom:8px;border:2px solid var(--bdr)}.sig-card.active{border-color:var(--ok)}.sig-card img{width:100%;height:72px;object-fit:contain;background:#fff;padding:5px;display:block}.sig-card-name{font-size:11px;color:var(--t2);text-align:center;padding:4px 8px;border-top:1px solid var(--bdr);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.sig-card-btn{width:100%;padding:8px;cursor:pointer;font-size:11.5px;font-weight:700;border:none;border-top:1px solid var(--bdr);transition:.14s;font-family:Inter,sans-serif}.sig-card-btn.active{background:var(--ok);color:#000}.sig-card-btn.inactive{background:var(--accg);color:var(--acc)}.sig-del-btn{position:absolute;top:5px;right:5px;background:rgba(240,80,80,.88);color:#fff;border:none;border-radius:5px;width:22px;height:22px;font-size:13px;cursor:pointer;display:none;align-items:center;justify-content:center;font-weight:700;z-index:3}.sig-card:hover .sig-del-btn{display:flex}.expbtn{display:flex;align-items:center;gap:8px;padding:8px 11px;background:var(--s2);border:1px solid var(--bdr);border-radius:var(--r);color:var(--text);font-size:12px;cursor:pointer;transition:.12s;width:100%;margin-bottom:6px}.expbtn:hover{background:var(--s3)}.expbtn svg{width:14px;height:14px;flex-shrink:0}.expext{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--t3);margin-left:auto}.drive-save-btn{display:flex;align-items:center;gap:8px;padding:10px 12px;background:rgba(48,201,126,.1);border:1.5px solid rgba(48,201,126,.35);border-radius:var(--r);color:var(--ok);font-size:12.5px;font-weight:700;cursor:pointer;transition:.14s;width:100%;margin-bottom:8px}.drive-save-btn:hover{background:rgba(48,201,126,.18);border-color:var(--ok)}.drive-save-btn svg{width:15px;height:15px;flex-shrink:0}.drive-save-btn .drive-path{font-size:10px;color:var(--t3);font-weight:400;display:block;margin-top:2px;font-family:"JetBrains Mono",monospace}#annInput{position:fixed!important;background:rgba(255,255,255,.97);border:2px solid #222;border-radius:9px;padding:9px 13px;font-size:14px;color:#111!important;outline:0!important;min-width:260px;max-width:440px;display:none;z-index:9000!important;box-shadow:0 6px 28px rgba(0,0,0,.4);user-select:text!important;caret-color:#222;font-family:Inter,sans-serif}#annInput:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(79,142,247,.18),0 6px 28px rgba(0,0,0,.4)}#inpHint{position:fixed!important;font-size:10px;color:var(--t3);display:none;z-index:8999;background:var(--s2);padding:3px 9px;border-radius:5px;pointer-events:none;border:1px solid var(--bdr)}.ctx-menu{position:fixed;background:var(--s2);border:1px solid var(--bdr);border-radius:var(--r);padding:4px;z-index:10000;min-width:170px;box-shadow:var(--sh2);display:none}.ctx-item{padding:8px 12px;border-radius:5px;font-size:12.5px;cursor:pointer;display:flex;align-items:center;gap:8px;color:var(--text);transition:background .1s}.ctx-item:hover{background:var(--s3)}.ctx-item.danger{color:var(--err)}.ctx-item.danger:hover{background:rgba(240,80,80,.1)}.ctx-sep{height:1px;background:var(--bdr);margin:3px 0}.textbox-el{position:absolute;z-index:5;cursor:move;border:1.5px dashed var(--acc);border-radius:4px;min-width:60px;min-height:28px;display:flex;align-items:center;justify-content:center}.textbox-el.selected{border-style:solid;box-shadow:0 0 0 2px rgba(79,142,247,.2)}.textbox-inner{outline:0;white-space:pre-wrap;word-break:break-word;width:100%;padding:4px 6px;line-height:1.4}.tb-resize{position:absolute;bottom:-5px;right:-5px;width:10px;height:10px;background:var(--acc);border-radius:2px;cursor:nwse-resize}#mobToolbar{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--surf);border-top:1px solid var(--bdr);z-index:500;height:56px;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch}#mobToolbar::-webkit-scrollbar{display:none}.mtb-inner{display:flex;align-items:center;gap:2px;height:100%;padding:4px;min-width:max-content}.mtb-btn{min-width:46px;height:46px;border-radius:8px;border:1.5px solid transparent;background:0 0;color:var(--t2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;transition:.13s;flex-shrink:0;-webkit-tap-highlight-color:transparent}.mtb-btn.on{background:var(--accg);color:var(--acc);border-color:var(--acc)}.mtb-btn svg{width:18px;height:18px}.mtb-btn span{font-size:8px;font-weight:600}.mtb-sep{width:1px;height:28px;background:var(--bdr);flex-shrink:0;margin:0 3px}#mobPanelOverlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:800;display:none}#mobPanelOverlay.show{display:block}#mobPanel{position:fixed;bottom:0;left:0;right:0;background:var(--surf);border-top:1px solid var(--bdr);border-radius:16px 16px 0 0;z-index:900;max-height:82vh;overflow-y:auto;transform:translateY(100%);transition:transform .26s cubic-bezier(.4,0,.2,1);padding-bottom:env(safe-area-inset-bottom,16px)}#mobPanel.show{transform:translateY(0)}.mp-handle{width:36px;height:4px;background:var(--bdr);border-radius:2px;margin:10px auto 12px}.mp-x{position:absolute;top:12px;right:14px;width:28px;height:28px;border-radius:50%;background:var(--s3);border:none;color:var(--t2);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center}.mp-section{padding:0 14px 14px}.mp-title{font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px;padding:8px 0 6px;border-bottom:1px solid var(--bdr)}.mob-color-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:12px}.mob-sw{width:100%;aspect-ratio:1;border-radius:50%;cursor:pointer;border:3px solid transparent;-webkit-tap-highlight-color:transparent}.mob-sw.on{border-color:#fff;transform:scale(1.1)}.mob-slider{width:100%;height:5px;appearance:none;background:var(--bdr);border-radius:3px;outline:0;cursor:pointer;-webkit-appearance:none}.mob-slider::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--acc);cursor:pointer}.mob-ctrl{margin-bottom:12px}.mob-ctrl-row{display:flex;justify-content:space-between;margin-bottom:5px}.mob-ctrl-lbl{font-size:12px;color:var(--t2)}.mob-ctrl-val{font-size:12px;font-family:"JetBrains Mono",monospace;color:var(--acc);font-weight:600}.mob-action-btn{width:100%;padding:13px;border-radius:10px;border:none;font-size:14px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;margin-bottom:8px;transition:.13s}.mob-action-btn.pri{background:var(--acc);color:#fff}.mob-action-btn.sec{background:var(--s3);color:var(--t2);border:1.5px solid var(--bdr)}.mob-action-btn.danger{background:0 0;color:var(--err);border:1.5px solid var(--err)}.estatusbar{height:22px;background:var(--surf);border-top:1px solid var(--bdr);display:flex;align-items:center;padding:0 10px;gap:14px;flex-shrink:0}.sbitem{font-size:10px;color:var(--t3);font-family:"JetBrains Mono",monospace;display:flex;align-items:center;gap:4px}.sbdot{width:6px;height:6px;border-radius:50%;background:var(--bdr)}.sbdot.ok{background:var(--ok)}.prog{position:fixed;top:0;left:0;width:100%;height:2px;background:var(--bdr);z-index:9999;display:none}.toast{position:fixed;bottom:24px;right:14px;background:var(--s2);border:1px solid var(--bdr);border-radius:var(--r);padding:10px 15px;font-size:12.5px;color:var(--text);z-index:19999;opacity:0;transform:translateY(5px);transition:.2s;pointer-events:none;max-width:300px}.toast.show{opacity:1;transform:translateY(0)}.toast.ok{border-left:3px solid var(--ok)}.toast.err{border-left:3px solid var(--err)}.toast.warn{border-left:3px solid var(--warn)}::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:3px}.hidden{display:none!important}hr{border:none;border-top:1px solid var(--bdr);margin:14px 0}@media(max-width:768px){body{-webkit-text-size-adjust:100%}#loginLayer{padding:12px;align-items:flex-start;padding-top:env(safe-area-inset-top,20px)}#subLayer{padding:16px 12px;padding-top:env(safe-area-inset-top,16px)}#editorLayer{height:100dvh;height:-webkit-fill-available}.login-wrap{max-width:100%;margin-top:12px}.login-logo{margin-bottom:20px}.login-logo .login-ico{width:40px;height:40px;font-size:18px}.login-title{font-size:20px}.login-card{padding:18px}.f-input,.f-select{padding:13px 14px;font-size:16px!important}.f-grid{grid-template-columns:1fr}.btn-primary{padding:14px;font-size:15px}.login-tabs .ltab{padding:11px;font-size:14px}.plan-grid{grid-template-columns:1fr}.pay-methods{flex-direction:column}.pay-method-btn{width:100%;justify-content:center}.admin-wrap{flex-direction:column}.admin-nav{display:none;position:fixed;inset:0;z-index:900;background:var(--surf);overflow-y:auto;width:100%!important;transform:translateX(-100%);transition:transform .25s}.admin-nav.mob-open{display:flex!important;transform:translateX(0)}.admin-main{padding:60px 14px 14px;width:100%}#admMobTopBar{display:flex;align-items:center;gap:8px;position:fixed;top:0;left:0;right:0;height:52px;background:var(--surf);border-bottom:1px solid var(--bdr);padding:0 12px;z-index:800}.adm-mob-menu-btn{width:36px;height:36px;border-radius:8px;border:1px solid var(--bdr);background:var(--s2);color:var(--t2);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;-webkit-tap-highlight-color:transparent}.adm-mob-title{font-size:14px;font-weight:700;flex:1}.stat-grid{grid-template-columns:1fr 1fr}#dashGrid{grid-template-columns:1fr!important}.sede-grid{grid-template-columns:1fr}.pstamp-grid{grid-template-columns:1fr 1fr}.data-table td,.data-table th{padding:7px 8px;font-size:11px}.modal-box{width:95vw!important;margin:0 auto;max-height:90vh}.modal-body{padding:14px}.elside,.eribbon,.erpanel,.estatusbar{display:none}.etopbar{height:50px;padding:0 8px;gap:4px;overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch}.etb-logo{min-width:auto;padding:0 8px}.etb-logo-txt{display:none}.etb-btn{padding:5px 9px;font-size:11.5px}.etb-btn svg{width:14px;height:14px}.etb-user{padding:0 6px}.etb-user span{display:none}.evtb{padding:4px 8px;gap:5px;overflow-x:auto}.evtb::-webkit-scrollbar{display:none}.evtb .evvs,.evtb .tlbl,.evtb select{display:none}.evscroll{padding:8px 4px 70px;align-items:flex-start;overflow-x:auto}#mobToolbar{display:block!important;height:58px}.mtb-btn{min-width:50px;height:50px}.mtb-btn svg{width:20px;height:20px}.mtb-btn span{font-size:8.5px}.drop-box{padding:32px 20px;max-width:100%}.drop-dt{font-size:17px}.drop-di{font-size:38px}.toast{bottom:70px!important;right:8px!important;left:8px!important;max-width:none!important;text-align:center}#mobPanel{max-height:88vh}.mp-section{padding:0 16px 16px}.mob-action-btn{padding:14px;font-size:15px}.pw{max-width:calc(100vw - 8px)!important}#annInput{font-size:16px!important;min-width:min(280px,92vw)!important;border-radius:10px!important}.ctx-menu{min-width:200px}.ctx-item{padding:13px 14px;font-size:14px}.tb-resize{width:18px!important;height:18px!important}}@media(max-width:380px){.stat-grid{grid-template-columns:1fr}.mtb-btn{min-width:44px;height:44px}#mobToolbar{height:54px}.evscroll{padding-bottom:62px}.login-card{padding:14px}}@media(max-width:768px) and (orientation:landscape){#loginLayer{align-items:center;padding:8px 20px}.login-wrap{max-width:500px;margin:0 auto}.evscroll{padding-bottom:62px}#mobToolbar{height:50px}#mobPanel{max-height:92vh}}@supports(padding:env(safe-area-inset-bottom)){#mobToolbar{padding-bottom:env(safe-area-inset-bottom,0)}.evscroll{padding-bottom:calc(66px + env(safe-area-inset-bottom,0))}}</style>
+</head>
+<body>
+
+
+<!-- ══ LOGIN ══ -->
+<div id="loginLayer">
+  <div class="login-wrap">
+    <div class="login-logo">
+      <div class="login-ico">P</div>
+      <div>
+        <div class="login-title">PDF<span>Pro</span></div>
+        <div class="login-sub">CORPAC AIS/ARO SPHI – Sistema de Edición PDF</div>
+      </div>
+    </div>
+    <div class="login-card">
+      <div class="login-tabs">
+        <div class="ltab on" id="ltab-login" onclick="switchLTab('login')">Iniciar Sesión</div>
+        <div class="ltab" id="ltab-register" onclick="switchLTab('register')">Registrarse</div>
+      </div>
+      <!-- LOGIN FORM -->
+      <div id="loginForm">
+        <div class="err-box" id="loginErr"></div>
+        <div class="f-group">
+          <label class="f-label">Usuario o Email</label>
+          <input class="f-input" id="loginUser" type="text" placeholder="usuario o correo@corpac.gob.pe" autocomplete="username" onkeydown="if(event.key==='Enter')doLogin()">
+        </div>
+        <div class="f-group">
+          <label class="f-label">Contraseña</label>
+          <input class="f-input" id="loginPass" type="password" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+        </div>
+        <button class="btn btn-primary" onclick="doLogin()">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/></svg>
+          Ingresar al Sistema
+        </button>
+        <div style="text-align:center;margin-top:12px;font-size:12px;color:var(--t3)">
+          ¿Sin cuenta? <span style="color:var(--acc);cursor:pointer;font-weight:600" onclick="switchLTab('register')">Regístrate aquí</span>
+          &nbsp;·&nbsp;
+          <span style="color:var(--t2);cursor:pointer" onclick="showForgotPass()">¿Olvidaste tu contraseña?</span>
+        </div>
+      </div>
+      <!-- FORGOT PASSWORD MODAL -->
+      <div id="forgotPassModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1000;display:none;align-items:center;justify-content:center">
+        <div style="background:var(--s1);border:1px solid var(--bdr);border-radius:var(--r);padding:28px;width:min(380px,92vw)">
+          <div style="font-size:15px;font-weight:700;margin-bottom:6px">Restablecer Contraseña</div>
+          <div style="font-size:12px;color:var(--t2);margin-bottom:16px">Ingresa tu email y te enviaremos las instrucciones.</div>
+          <div class="err-box" id="forgotErr"></div>
+          <div class="ok-box" id="forgotOk" style="display:none;background:rgba(48,201,126,.1);border:1px solid rgba(48,201,126,.3);border-radius:var(--r);padding:10px 13px;font-size:12.5px;color:var(--ok);margin-bottom:12px"></div>
+          <div class="f-group"><label class="f-label">Email registrado</label>
+            <input class="f-input" id="forgotEmail" type="email" placeholder="correo@corpac.gob.pe" onkeydown="if(event.key==='Enter')doForgotPass()">
+          </div>
+          <div style="display:flex;gap:8px;margin-top:16px">
+            <button class="btn btn-ghost" style="flex:1" onclick="hideForgotPass()">Cancelar</button>
+            <button class="btn btn-primary" style="flex:2" onclick="doForgotPass()">Enviar Instrucciones</button>
+          </div>
+          <div style="text-align:center;margin-top:10px;font-size:11.5px;color:var(--t3)">
+            ¿Ya tienes un token? <span style="color:var(--acc);cursor:pointer" onclick="showResetTokenForm()">Ingresar token →</span>
+          </div>
+        </div>
+      </div>
+      <!-- REGISTER FORM -->
+      <div id="registerForm" style="display:none">
+        <div style="background:rgba(79,142,247,.08);border:1px solid rgba(79,142,247,.2);border-radius:var(--r);padding:10px 13px;margin-bottom:14px;font-size:12px;color:var(--t2)">
+          <strong style="color:var(--acc);display:block;margin-bottom:3px">⚡ Suscripción requerida</strong>
+          Tras registrarte seleccionarás un plan de acceso.
+        </div>
+        <div class="err-box" id="registerErr"></div>
+        <div class="f-grid">
+          <div class="f-group"><label class="f-label">Nombre Completo</label><input class="f-input" id="regName" placeholder="Apellidos y Nombres"></div>
+          <div class="f-group"><label class="f-label">Usuario</label><input class="f-input" id="regUser" placeholder="mi.usuario"></div>
+        </div>
+        <div class="f-group"><label class="f-label">Email</label><input class="f-input" id="regEmail" type="email" placeholder="correo@corpac.gob.pe"></div>
+        <div class="f-grid">
+          <div class="f-group"><label class="f-label">Contraseña</label><input class="f-input" id="regPass" type="password" placeholder="Mínimo 6 caracteres"></div>
+          <div class="f-group"><label class="f-label">Confirmar</label><input class="f-input" id="regPass2" type="password" placeholder="Repetir"></div>
+        </div>
+        <div class="f-grid">
+          <div class="f-group"><label class="f-label">Cargo</label>
+            <select class="f-select" id="regCargo">
+              <option>Supervisor AIS/ARO</option><option>Especialista AIS/ARO</option>
+              <option>Especialista AIS/AD</option><option>Especialista AIS Prov.</option>
+            </select>
+          </div>
+          <div class="f-group"><label class="f-label">Sede</label>
+            <select class="f-select" id="regSede"><option>SPHI – Chiclayo</option></select>
+          </div>
+        </div>
+        <div class="f-group">
+          <label class="f-label">Sello Personal <span style="color:var(--t3);font-weight:400">(imagen PNG/JPG — obligatorio)</span></label>
+          <div id="regStampPreview" style="display:none;margin-bottom:8px;text-align:center">
+            <img id="regStampImg" style="max-height:80px;max-width:100%;border:1px solid var(--bdr);border-radius:6px;background:#fff;padding:4px">
+            <div style="font-size:11px;color:var(--ok);margin-top:4px">✅ Sello cargado</div>
+          </div>
+          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;border:2px dashed var(--bdr);border-radius:var(--r);padding:12px;transition:border-color .2s" onmouseenter="this.style.borderColor='var(--acc)'" onmouseleave="this.style.borderColor='var(--bdr)'">
+            <span style="font-size:22px">🖊️</span>
+            <span style="font-size:12.5px;color:var(--t2)">Haz clic para subir tu sello personal</span>
+            <input type="file" id="regStampFile" accept="image/*" style="display:none" onchange="previewRegStamp(this)">
+          </label>
+        </div>
+        <button class="btn btn-primary" style="background:var(--ok);color:#000" onclick="doRegister()">Crear Cuenta</button>
+        <div style="text-align:center;margin-top:10px;font-size:12px;color:var(--t3)">
+          ¿Ya tienes cuenta? <span style="color:var(--acc);cursor:pointer;font-weight:600" onclick="switchLTab('login')">Inicia sesión</span>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:14px;font-size:11px;color:var(--t3)">CORPAC AIS/ARO Platform v2.0</div>
+  </div>
+</div>
+
+<!-- ══ SUBSCRIPTION ══ -->
+<div id="subLayer">
+  <div class="sub-wrap">
+    <div class="sub-hdr">
+      <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:12px">
+        <div class="login-ico">P</div>
+        <span style="font-size:20px;font-weight:800">PDF<span style="color:var(--acc)">Pro</span></span>
+      </div>
+      <h2>Elige tu plan de suscripción</h2>
+      <p>Acceso al sistema de edición PDF CORPAC AIS/ARO</p>
+    </div>
+    <div class="plan-grid" id="planGrid"></div>
+    <div class="pay-section" id="paySection" style="display:none">
+      <div class="card">
+        <div class="card-hd">
+          <div><div class="card-title" id="payTitle">Plan</div><div style="font-size:12px;color:var(--t2);margin-top:2px" id="payPrice"></div></div>
+          <button class="btn btn-ghost btn-sm" onclick="showPlans()">← Cambiar</button>
+        </div>
+        <div class="card-body">
+          <div style="font-size:11px;color:var(--t3);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Método de Pago</div>
+          <div class="pay-methods" id="payMethodBtns"></div>
+          <div class="pay-detail-box" id="payDetailBox"></div>
+          <div class="secure-note"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor" width="13" height="13"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>Pago seguro SSL 256-bit</div>
+          <button class="btn btn-primary btn-full" style="margin-top:16px" onclick="processPayment()">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            Confirmar Suscripción
+          </button>
+        </div>
+      </div>
+      <div style="text-align:center">
+        <button class="btn btn-ghost btn-sm" onclick="logoutAll()">← Volver al inicio</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ADMIN PANEL ══ -->
+<div id="adminLayer">
+  <!-- Mobile admin topbar -->
+  <div id="admMobTopBar" style="display:none">
+    <button class="adm-mob-menu-btn" onclick="toggleAdminMobileNav()" id="admMobMenuBtn">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" width="18" height="18"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+    <span class="adm-mob-title" id="admMobTitle">Panel Admin</span>
+    <button class="adm-mob-menu-btn" onclick="exitAdmin()">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+    </button>
+  </div>
+  <!-- Nav overlay for mobile -->
+  <div id="adminNavOverlay" onclick="closeAdminMobileNav()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:850;backdrop-filter:blur(2px)"></div>
+  <div class="admin-wrap">
+    <!-- NAV -->
+    <nav class="admin-nav" id="adminNav">
+      <div class="admin-nav-top">
+        <div class="admin-nav-ico">P</div>
+        <div><div style="font-weight:800;font-size:14px">PDFPro</div><div style="font-size:10px;color:var(--t3)">Panel Admin</div></div>
+      </div>
+      <div style="padding:8px 6px;flex:1">
+        <div class="an-section">General</div>
+        <div class="an-item on" id="an-dashboard" onclick="adminNav('dashboard')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>Dashboard</div>
+        <div class="an-section">Gestión</div>
+        <div class="an-item" id="an-users" onclick="adminNav('users')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>Personal / Usuarios</div>
+        <div class="an-item" id="an-sedes" onclick="adminNav('sedes')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Sedes Aeroportuarias</div>
+        <div class="an-item" id="an-stamps" onclick="adminNav('stamps')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>Sellos Personales</div>
+        <div class="an-item" id="an-subs" onclick="adminNav('subs')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>Suscripciones</div>
+        <div class="an-section">Configuración</div>
+        <div class="an-item" id="an-plans" onclick="adminNav('plans')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>Planes</div>
+        <div class="an-item" id="an-payments" onclick="adminNav('payments')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>Medios de Pago</div>
+        <div class="an-item" id="an-drive" onclick="adminNav('drive')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"/></svg>Google Drive</div>
+        <div class="an-item" id="an-settings" onclick="adminNav('settings')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3" stroke-width="1.7"/></svg>Configuración</div>
+      </div>
+      <div style="padding:12px;border-top:1px solid var(--bdr)">
+        <div style="font-size:10.5px;color:var(--t3);margin-bottom:7px">Sesión Admin</div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:9px">
+          <div style="width:28px;height:28px;border-radius:50%;background:var(--acc);color:#000;font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0" id="adminNavIco">M</div>
+          <div><div style="font-size:12px;font-weight:600" id="adminNavName">Admin</div><div style="font-size:10px;color:var(--t3)">Administrador</div></div>
+        </div>
+        <button class="btn btn-ghost btn-sm btn-full" onclick="exitAdmin()">← Salir del Panel</button>
+      </div>
+    </nav>
+    <!-- MAIN -->
+    <div class="admin-main" id="adminMain">
+      <!-- DASHBOARD -->
+      <div id="adm-dashboard">
+        <div class="admin-topbar">
+          <div><div class="page-title">Dashboard</div><div class="page-sub">Panel de control — PDFPro CORPAC AIS/ARO</div></div>
+          <div style="font-size:11px;color:var(--t3);font-family:JetBrains Mono,monospace" id="admClock"></div>
+        </div>
+        <div class="stat-grid" id="dashStats"></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px" id="dashGrid">
+          <div class="card"><div class="card-hd"><div class="card-title">Usuarios Recientes</div></div><div style="overflow-x:auto"><table class="data-table" id="dashUsers"></table></div></div>
+          <div class="card"><div class="card-hd"><div class="card-title">Suscripciones</div></div><div style="overflow-x:auto"><table class="data-table" id="dashSubs"></table></div></div>
+        </div>
+      </div>
+      <!-- USERS -->
+      <div id="adm-users" class="hidden">
+        <div class="admin-topbar">
+          <div><div class="page-title">Personal / Usuarios</div><div class="page-sub">Gestión del personal AIS/ARO</div></div>
+          <button class="btn btn-primary btn-sm" onclick="openUserModal(null)">+ Nuevo Personal</button>
+        </div>
+        <div class="card">
+          <div class="card-hd"><div class="card-title">Todo el Personal</div>
+            <input class="search-input" id="userSearchInp" placeholder="Buscar..." oninput="renderUsersTable()">
+          </div>
+          <div style="overflow-x:auto"><table class="data-table"><thead><tr><th>Login</th><th>Nombre</th><th>Cargo</th><th>Sede</th><th>Plan</th><th>Estado</th><th>Vence</th><th>Acciones</th></tr></thead><tbody id="usersTableBody"></tbody></table></div>
+        </div>
+      </div>
+      <!-- SEDES -->
+      <div id="adm-sedes" class="hidden">
+        <div class="admin-topbar">
+          <div><div class="page-title">Sedes Aeroportuarias</div><div class="page-sub">Gestión de sedes CORPAC</div></div>
+          <button class="btn btn-primary btn-sm" onclick="openSedeModal(null)">+ Nueva Sede</button>
+        </div>
+        <div class="sede-grid" id="sedeGrid"></div>
+      </div>
+      <!-- STAMPS -->
+      <div id="adm-stamps" class="hidden">
+        <div class="admin-topbar">
+          <div><div class="page-title">Sellos Personales</div><div class="page-sub">Carga y gestiona los sellos del personal AIS/ARO</div></div>
+          <label class="btn btn-ok btn-sm" for="adminStampUpload" style="cursor:pointer">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+            Cargar Sellos
+          </label>
+          <input type="file" id="adminStampUpload" accept="image/*" multiple style="display:none" onchange="adminUploadStamps(this)">
+        </div>
+        <div style="background:rgba(79,142,247,.07);border:1px solid rgba(79,142,247,.2);border-radius:var(--r);padding:11px 14px;margin-bottom:16px;font-size:12.5px;color:var(--t2)">
+          <strong style="color:var(--acc)">ℹ</strong> Los sellos cargados aquí estarán disponibles para todos los usuarios del sistema. Cada trabajador selecciona su sello al iniciar turno.
+        </div>
+        <div class="pstamp-grid" id="adminStampGrid"></div>
+      </div>
+      <!-- SUBS -->
+      <div id="adm-subs" class="hidden">
+        <div class="admin-topbar"><div><div class="page-title">Suscripciones</div><div class="page-sub">Historial y gestión de accesos</div></div></div>
+        <div class="card"><div style="overflow-x:auto"><table class="data-table"><thead><tr><th>Usuario</th><th>Plan</th><th>Estado</th><th>Inicio</th><th>Vence</th><th>Monto</th><th>Método</th><th>Acciones</th></tr></thead><tbody id="subsTableBody"></tbody></table></div></div>
+      </div>
+      <!-- PLANS -->
+      <div id="adm-plans" class="hidden">
+        <div class="admin-topbar"><div><div class="page-title">Planes</div><div class="page-sub">Configura los planes de suscripción</div></div><button class="btn btn-primary btn-sm" onclick="openPlanModal(null)">+ Nuevo Plan</button></div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px" id="plansAdmGrid"></div>
+      </div>
+      <!-- PAYMENTS -->
+      <div id="adm-payments" class="hidden">
+        <div class="admin-topbar"><div><div class="page-title">Medios de Pago</div><div class="page-sub">Configura métodos de pago disponibles</div></div><button class="btn btn-primary btn-sm" onclick="savePaymentsConfig()">💾 Guardar</button></div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px" id="paymentsAdmGrid"></div>
+      </div>
+      <!-- GOOGLE DRIVE -->
+      <div id="adm-drive" class="hidden">
+        <div class="admin-topbar"><div><div class="page-title">Google Drive</div><div class="page-sub">Configurar carpeta de guardado automático</div></div></div>
+        <div class="card" style="max-width:620px">
+          <div class="card-hd"><div class="card-title">📁 Carpeta de guardado — Google Drive</div></div>
+          <div class="card-body">
+            <div style="background:rgba(79,142,247,.07);border:1px solid rgba(79,142,247,.2);border-radius:var(--r);padding:12px 14px;margin-bottom:16px;font-size:12.5px;color:var(--t2);line-height:1.6">
+              <strong style="color:var(--acc);display:block;margin-bottom:5px">Cuenta Google Drive:</strong>
+              <span id="driveAccountLbl" style="font-family:JetBrains Mono,monospace;font-size:12px">sphiaisaro@gmail.com</span>
+            </div>
+            <div style="margin-bottom:14px">
+              <div style="font-size:10.5px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px">Estructura de carpetas</div>
+              <div class="drive-folder-tree">
+                <div class="drive-folder">📁 FPL<span id="driveYear"></span></div>
+                <div class="drive-subfolder">📂 Enero</div>
+                <div class="drive-subfolder">📂 Febrero</div>
+                <div class="drive-subfolder">📂 Marzo</div>
+                <div class="drive-subfolder" style="color:var(--acc);font-weight:700">📂 <span id="driveCurrentMonth"></span> ← mes actual</div>
+                <div class="drive-subfolder" style="opacity:.4">📂 ...</div>
+                <div class="drive-subfolder" style="opacity:.4">📂 Diciembre</div>
+              </div>
+            </div>
+            <div class="f-group">
+              <label class="f-label">Nombre de carpeta raíz</label>
+              <input class="f-input" id="driveFolderName" value="FPL" oninput="updateDriveFolderPreview()">
+              <div style="font-size:11px;color:var(--t3);margin-top:4px">El año se agrega automáticamente. Ej: <strong style="color:var(--acc)">FPL2026</strong></div>
+            </div>
+            <div class="f-group">
+              <label class="f-label">Cuenta Google</label>
+              <input class="f-input" id="driveAccountInp" value="sphiaisaro@gmail.com">
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">
+              <button class="btn btn-primary btn-sm" onclick="saveDriveConfig()">💾 Guardar configuración</button>
+              <button id="driveConnectBtn" class="btn btn-ghost btn-sm" onclick="testDriveConnection()">🔗 Conectar con Google Drive</button>
+            </div>
+            <div id="driveStatusBox" style="margin-top:14px;display:none"></div>
+          </div>
+        </div>
+      </div>
+      <!-- SETTINGS -->
+      <div id="adm-settings" class="hidden">
+        <div class="admin-topbar"><div><div class="page-title">Configuración</div><div class="page-sub">Ajustes generales del sistema</div></div><button class="btn btn-primary btn-sm" onclick="saveSettings()">💾 Guardar</button></div>
+        <div style="max-width:580px">
+          <div class="card" style="margin-bottom:16px">
+            <div class="card-hd"><div class="card-title">Información del Sistema</div></div>
+            <div class="card-body">
+              <div class="f-group"><label class="f-label">Nombre de la Plataforma</label><input class="f-input" id="cfgName"></div>
+              <div class="f-group"><label class="f-label">Organización</label><input class="f-input" id="cfgOrg"></div>
+              <div class="f-group"><label class="f-label">Email de Soporte</label><input class="f-input" id="cfgEmail" type="email"></div>
+              <div class="f-group"><label class="f-label">Mensaje de Bienvenida</label><textarea class="f-input" id="cfgWelcome" rows="3" style="resize:vertical"></textarea></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-hd"><div class="card-title">Cambiar Contraseña Admin</div></div>
+            <div class="card-body">
+              <div class="f-group"><label class="f-label">Contraseña Actual</label><input class="f-input" id="cfgOldPass" type="password"></div>
+              <div class="f-grid">
+                <div class="f-group"><label class="f-label">Nueva Contraseña</label><input class="f-input" id="cfgNewPass" type="password"></div>
+                <div class="f-group"><label class="f-label">Confirmar</label><input class="f-input" id="cfgNewPass2" type="password"></div>
+              </div>
+              <button class="btn btn-warn btn-sm" onclick="changeAdminPass()">Cambiar Contraseña Admin</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODALS ══ -->
+<!-- User modal -->
+<div class="modal-overlay" id="userModal">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-hd"><div class="modal-hd-title" id="userModalTitle">Nuevo Personal</div><button class="modal-hd-x" onclick="closeModal('userModal')">✕</button></div>
+    <div class="modal-body">
+      <input type="hidden" id="editUserId">
+      <div class="f-grid">
+        <div class="f-group"><label class="f-label">Nombre Completo</label><input class="f-input" id="uName" placeholder="Apellidos y Nombres"></div>
+        <div class="f-group"><label class="f-label">Usuario (login)</label><input class="f-input" id="uLogin"></div>
+      </div>
+      <div class="f-group"><label class="f-label">Email</label><input class="f-input" id="uEmail" type="email"></div>
+      <div class="f-grid">
+        <div class="f-group"><label class="f-label">Contraseña</label><input class="f-input" id="uPass" type="password" placeholder="Dejar vacío para no cambiar"></div>
+        <div class="f-group"><label class="f-label">Cargo</label>
+          <select class="f-select" id="uCargo">
+            <option>Supervisor AIS/ARO</option><option>Especialista AIS/ARO</option>
+            <option>Especialista AIS/AD</option><option>Especialista AIS Prov.</option>
+          </select>
+        </div>
+      </div>
+      <div class="f-grid">
+        <div class="f-group"><label class="f-label">Sede</label><select class="f-select" id="uSede"></select></div>
+        <div class="f-group"><label class="f-label">Plan</label><select class="f-select" id="uPlan"></select></div>
+      </div>
+      <div class="f-grid">
+        <div class="f-group"><label class="f-label">Estado</label>
+          <select class="f-select" id="uStatus"><option value="active">Activo</option><option value="suspended">Suspendido</option><option value="expired">Expirado</option><option value="trial">Prueba</option></select>
+        </div>
+        <div class="f-group"><label class="f-label">Vence</label><input class="f-input" id="uExpiry" type="date"></div>
+      </div>
+      <div class="f-group"><label class="f-label">Notas</label><textarea class="f-input" id="uNotes" rows="2" style="resize:vertical"></textarea></div>
+      <div class="f-group">
+        <label class="f-label">Sello Personal</label>
+        <div id="uStampPreview" style="display:none;margin-bottom:8px;background:var(--s2);border:1px solid var(--bdr);border-radius:var(--r);padding:8px;text-align:center">
+          <img id="uStampImg" style="max-height:72px;max-width:100%;object-fit:contain;background:#fff;border-radius:4px;padding:3px">
+          <div style="font-size:11px;color:var(--t3);margin-top:4px" id="uStampName"></div>
+        </div>
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;border:2px dashed var(--bdr);border-radius:var(--r);padding:10px 14px;transition:border-color .2s" onmouseenter="this.style.borderColor='var(--acc)'" onmouseleave="this.style.borderColor='var(--bdr)'">
+          <span style="font-size:20px">🖊️</span>
+          <span style="font-size:12px;color:var(--t2)" id="uStampLbl">Cargar / reemplazar sello</span>
+          <input type="file" id="uStampFile" accept="image/*" style="display:none" onchange="previewUserModalStamp(this)">
+        </label>
+      </div>
+    </div>
+    <div class="modal-foot"><button class="btn btn-ghost btn-sm" onclick="closeModal('userModal')">Cancelar</button><button class="btn btn-primary btn-sm" onclick="saveUser()">💾 Guardar</button></div>
+  </div>
+</div>
+<!-- Sede modal -->
+<div class="modal-overlay" id="sedeModal">
+  <div class="modal-box" onclick="event.stopPropagation()" style="max-width:440px">
+    <div class="modal-hd"><div class="modal-hd-title" id="sedeModalTitle">Nueva Sede</div><button class="modal-hd-x" onclick="closeModal('sedeModal')">✕</button></div>
+    <div class="modal-body">
+      <input type="hidden" id="editSedeId">
+      <div class="f-grid">
+        <div class="f-group"><label class="f-label">Código ICAO</label><input class="f-input" id="sCode" placeholder="SPHI" style="text-transform:uppercase"></div>
+        <div class="f-group"><label class="f-label">Ciudad</label><input class="f-input" id="sCity" placeholder="Chiclayo"></div>
+      </div>
+      <div class="f-group"><label class="f-label">Nombre del Aeropuerto</label><input class="f-input" id="sName" placeholder="Aeropuerto José Abelardo Quiñones Gonzales"></div>
+      <div class="f-group"><label class="f-label">Región / Departamento</label><input class="f-input" id="sRegion" placeholder="Lambayeque"></div>
+    </div>
+    <div class="modal-foot"><button class="btn btn-ghost btn-sm" onclick="closeModal('sedeModal')">Cancelar</button><button class="btn btn-primary btn-sm" onclick="saveSede()">💾 Guardar</button></div>
+  </div>
+</div>
+<!-- Plan modal -->
+<div class="modal-overlay" id="planModal">
+  <div class="modal-box" onclick="event.stopPropagation()" style="max-width:460px">
+    <div class="modal-hd"><div class="modal-hd-title" id="planModalTitle">Nuevo Plan</div><button class="modal-hd-x" onclick="closeModal('planModal')">✕</button></div>
+    <div class="modal-body">
+      <input type="hidden" id="editPlanId">
+      <div class="f-grid">
+        <div class="f-group"><label class="f-label">Nombre</label><input class="f-input" id="pName" placeholder="Plan Mensual"></div>
+        <div class="f-group"><label class="f-label">Precio</label><input class="f-input" id="pPrice" type="number" step="0.01" placeholder="29.90"></div>
+      </div>
+      <div class="f-grid">
+        <div class="f-group"><label class="f-label">Moneda</label><select class="f-select" id="pCurrency"><option>PEN</option><option>USD</option></select></div>
+        <div class="f-group"><label class="f-label">Período</label><select class="f-select" id="pPeriod"><option value="monthly">Mensual</option><option value="quarterly">Trimestral</option><option value="yearly">Anual</option><option value="lifetime">Vitalicio</option></select></div>
+      </div>
+      <div class="f-group"><label class="f-label">Descripción</label><input class="f-input" id="pDesc" placeholder="Descripción breve"></div>
+      <div class="f-group"><label class="f-label">Características (una por línea)</label><textarea class="f-input" id="pFeats" rows="5" style="resize:vertical" placeholder="Edición PDF completa&#10;Firmas y sellos&#10;Soporte incluido"></textarea></div>
+      <div class="f-grid">
+        <div class="f-group"><label class="f-label">Color</label><input class="f-input" id="pColor" type="color" value="#4f8ef7" style="height:40px;padding:4px"></div>
+        <div class="f-group"><label class="f-label">Destacado</label><select class="f-select" id="pFeatured"><option value="0">No</option><option value="1">Sí (Recomendado)</option></select></div>
+      </div>
+    </div>
+    <div class="modal-foot"><button class="btn btn-ghost btn-sm" onclick="closeModal('planModal')">Cancelar</button><button class="btn btn-primary btn-sm" onclick="savePlan()">💾 Guardar</button></div>
+  </div>
+</div>
+
+<!-- ══ EDITOR ══ -->
+<div id="editorLayer" style="display:none;flex-direction:column;height:100vh">
+  <!-- Topbar -->
+  <div class="etopbar">
+    <div class="etb-logo"><div class="etb-logo-ico">P</div><div class="etb-logo-txt">PDF<span>Pro</span></div></div>
+    <button class="etb-btn" onclick="docTabSaveCurrent();document.getElementById('fInput').click()"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>Abrir</button>
+    <button class="etb-btn acc" onclick="saveToDrive()"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"/></svg>Drive</button>
+    <button class="etb-btn" onclick="exportPDF()"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg>Guardar PDF</button>
+    <button class="etb-btn" onclick="doPrint()"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>Imprimir</button>
+    <div class="etb-sep"></div>
+    <button class="etb-btn" onclick="doUndo()"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/></svg>Deshacer</button>
+    <button class="etb-btn" onclick="doRedo()"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 10H11a8 8 0 00-8 8v2M21 10l-6 6m6-6l-6-6"/></svg>Rehacer</button>
+    <div class="etb-user" id="editorUserBar">
+      <div class="etb-user-ico" id="edUserIco">U</div>
+      <span id="edUserName" style="font-size:12px"></span>
+      <button class="etb-btn btn-sm" onclick="showEditorTab('user')">Mi Cuenta</button>
+      <button class="etb-btn btn-sm" onclick="logoutAll()">Salir</button>
+    </div>
+  </div>
+  <!-- Document Tabs -->
+  <div class="doc-tabs-bar" id="docTabsBar">
+    <div class="doc-tab-add" title="Nuevo documento" onclick="docTabNew()">＋</div>
+  </div>
+  <!-- Ribbon -->
+  <div class="eribbon">
+    <div class="erg">
+      <button class="rb on" id="rb-cursor" onclick="setTool('cursor')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M5 3l14 9-7 1-3 7L5 3z"/></svg><span class="rb-lbl">Selec.</span></button>
+      <button class="rb" id="rb-textbox" onclick="setTool('textbox')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><rect x="3" y="5" width="18" height="14" rx="2" stroke-width="1.7"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M7 9h10M7 12h6"/></svg><span class="rb-lbl">Cuadro T.</span></button>
+      <button class="rb" id="rb-edit-para" onclick="setTool('edit-para')" title="Editar párrafo — clic sobre cualquier párrafo para editarlo"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><rect x="3" y="3" width="18" height="18" rx="2" stroke-width="1.7" stroke-dasharray="4 2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M8 8h8M8 12h8M8 16h5"/></svg><span class="rb-lbl">Edit. párr.</span></button>
+      <button class="rb" id="rb-highlight" onclick="setTool('highlight')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg><span class="rb-lbl">Resalt.</span></button>
+      <button class="rb" id="rb-draw" onclick="setTool('draw')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z"/></svg><span class="rb-lbl">Lápiz</span></button>
+      <button class="rb" id="rb-eraser" onclick="setTool('eraser')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M6 18L17.94 6.06A1.5 1.5 0 0120.06 8.18L8.12 20.12A2 2 0 016.7 20.7L4 21l.3-2.7A2 2 0 016 18z"/></svg><span class="rb-lbl">Borrar</span></button>
+    </div>
+    <div class="rv"></div>
+    <div class="erg">
+      <button class="rb" id="rb-rect" onclick="setTool('rect')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><rect x="3" y="3" width="18" height="18" rx="2" stroke-width="1.7"/></svg><span class="rb-lbl">Rect.</span></button>
+      <button class="rb" id="rb-circle" onclick="setTool('circle')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="9" stroke-width="1.7"/></svg><span class="rb-lbl">Elipse</span></button>
+      <button class="rb" id="rb-line" onclick="setTool('line')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M4 20L20 4"/></svg><span class="rb-lbl">Línea</span></button>
+      <button class="rb" id="rb-arrow" onclick="setTool('arrow')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M5 19L19 5m0 0h-7m7 0v7"/></svg><span class="rb-lbl">Flecha</span></button>
+    </div>
+    <div class="rv"></div>
+    <div class="erg">
+      <button class="rb" onclick="placeSelloRecepcion()"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span class="rb-lbl">Sello Rec.</span></button>
+      <button class="rb" onclick="openStampModal()"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138z"/></svg><span class="rb-lbl">Sello</span></button>
+      <button class="rb" onclick="showEditorTab('sigs')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg><span class="rb-lbl">Firmas</span></button>
+    </div>
+    <div class="rv"></div>
+    <div class="erg">
+      <button class="rb" onclick="pmAddBlankPage()"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg><span class="rb-lbl">+Pág.</span></button>
+      <button class="rb" onclick="pmDeletePage()"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg><span class="rb-lbl">Elim.Pág</span></button>
+      <button class="rb" onclick="pmMovePage(-1)"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M5 15l7-7 7 7"/></svg><span class="rb-lbl">Subir</span></button>
+      <button class="rb" onclick="pmMovePage(1)"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M19 9l-7 7-7-7"/></svg><span class="rb-lbl">Bajar</span></button>
+    </div>
+    <div class="rv"></div>
+    <div class="erg">
+      <button class="rb" onclick="saveToDrive()" style="color:var(--ok)"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"/></svg><span class="rb-lbl">Drive</span></button>
+      <button class="rb" onclick="exportWord()"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg><span class="rb-lbl">Word</span></button>
+      <button class="rb" onclick="exportExcel()"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg><span class="rb-lbl">Excel</span></button>
+    </div>
+  </div>
+  <div class="emain">
+    <!-- Left sidebar -->
+    <div class="elside">
+      <button class="els on" id="els-props" onclick="showEditorTab('props')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3" stroke-width="1.7"/></svg><span class="tip">Propiedades</span></button>
+      <button class="els" id="els-pages" onclick="showEditorTab('pages')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7"/></svg><span class="tip">Páginas</span></button>
+      <button class="els" id="els-sigs" onclick="showEditorTab('sigs')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg><span class="tip">Firmas</span></button>
+      <button class="els" id="els-export" onclick="showEditorTab('export')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg><span class="tip">Exportar</span></button>
+      <button class="els" id="els-aero" onclick="showEditorTab('aero')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg><span class="tip">AERO</span></button>
+      <button class="els" id="els-tts" onclick="showEditorTab('tts')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M15.536 8.464a5 5 0 010 7.072M12 6a7 7 0 010 12m-3.536-9.536a5 5 0 000 7.072M9 12H5l-2 3h2v3l4-2"/></svg><span class="tip">Lector</span></button>
+      <button class="els" id="els-user" onclick="showEditorTab('user')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg><span class="tip">Mi Cuenta</span></button>
+      <div class="eldiv"></div>
+      <button class="els" id="els-t-cursor" onclick="setTool('cursor')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M5 3l14 9-7 1-3 7L5 3z"/></svg><span class="tip">Selec. (V)</span></button>
+      <button class="els" id="els-t-textbox" onclick="setTool('textbox')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><rect x="3" y="5" width="18" height="14" rx="2" stroke-width="1.7"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M7 9h10M7 12h6"/></svg><span class="tip">Cuadro Texto (B)</span></button>
+      <button class="els" id="els-t-text" onclick="setTool('text')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M4 6h16M4 12h16M4 18h7"/></svg><span class="tip">Texto (T)</span></button>
+      <button class="els" id="els-t-highlight" onclick="setTool('highlight')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg><span class="tip">Resalt. (H)</span></button>
+      <button class="els" id="els-t-draw" onclick="setTool('draw')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z"/></svg><span class="tip">Lápiz (D)</span></button>
+      <button class="els" id="els-t-eraser" onclick="setTool('eraser')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M6 18L17.94 6.06A1.5 1.5 0 0120.06 8.18L8.12 20.12A2 2 0 016.7 20.7L4 21l.3-2.7A2 2 0 016 18z"/></svg><span class="tip">Borrador (E)</span></button>
+      <button class="els" id="els-t-rect" onclick="setTool('rect')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><rect x="3" y="3" width="18" height="18" rx="2" stroke-width="1.7"/></svg><span class="tip">Rect. (R)</span></button>
+      <button class="els" id="els-t-arrow" onclick="setTool('arrow')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M5 19L19 5m0 0h-7m7 0v7"/></svg><span class="tip">Flecha (A)</span></button>
+    </div>
+    <!-- Viewer -->
+    <div class="eviewer" id="eviewerArea">
+      <div class="evtb">
+        <button class="zb" onclick="zoomOut()">−</button>
+        <span class="zval" id="zoomVal" onclick="promptZoom()">120%</span>
+        <button class="zb" onclick="zoomIn()">+</button>
+        <select style="background:var(--s2);border:1px solid var(--bdr);border-radius:5px;color:var(--t2);font-size:11px;padding:3px 4px;outline:none" onchange="setZoom(+this.value/100);this.value=''">
+          <option value="">%</option><option value="50">50%</option><option value="75">75%</option><option value="100">100%</option><option value="125">125%</option><option value="150">150%</option><option value="200">200%</option>
+        </select>
+        <div class="evvs"></div>
+        <button class="pnb" id="prevBtn" onclick="prevPage()" disabled>‹</button>
+        <input class="pi" type="number" id="pInput" value="1" min="1" onchange="goToPage(+this.value)">
+        <span style="font-size:11px;color:var(--t2)" id="totPages">/ −</span>
+        <button class="pnb" id="nextBtn" onclick="nextPage()" disabled>›</button>
+        <div class="evvs"></div>
+        <span class="tlbl" id="toolLbl">Seleccionar</span>
+      </div>
+      <div class="evscroll" id="evScroll">
+        <div class="drop-zone" id="dropZone">
+          <div class="drop-box" id="dropBox" onclick="document.getElementById('fInput').click()">
+            <div class="drop-di">📄</div>
+            <div class="drop-dt">Arrastra tu PDF aquí</div>
+            <div class="drop-ds">o <em>haz clic para abrir</em></div>
+            <div class="drop-tags"><span class="dtag">PDF</span><span class="dtag">Texto</span><span class="dtag">Firmas</span><span class="dtag">Sellos</span></div>
+          </div>
+        </div>
+        <div id="pagesBox" class="hidden"></div>
+      </div>
+    </div>
+    <!-- Right panel -->
+    <div class="erpanel">
+      <div class="ertabs">
+        <div class="ertab on" id="ert-props" onclick="showEditorTab('props')">Props</div>
+        <div class="ertab" id="ert-pages" onclick="showEditorTab('pages')">Págs</div>
+        <div class="ertab" id="ert-sigs" onclick="showEditorTab('sigs')">Firmas</div>
+        <div class="ertab" id="ert-export" onclick="showEditorTab('export')">Export</div>
+        <div class="ertab" id="ert-aero" onclick="showEditorTab('aero')">AERO</div>
+        <div class="ertab" id="ert-tts" onclick="showEditorTab('tts')">Lector</div>
+        <div class="ertab" id="ert-user" onclick="showEditorTab('user')">Cuenta</div>
+      </div>
+
+      <!-- PROPS tab -->
+      <div id="etab-props">
+        <div class="ersec">
+          <div class="ersec-title">Documento</div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:11.5px;color:var(--t2)">Archivo</span><span style="font-size:11.5px;font-family:JetBrains Mono,monospace;color:var(--text);max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" id="dName">−</span></div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:11.5px;color:var(--t2)">Páginas</span><span style="font-size:11.5px;font-family:JetBrains Mono,monospace;color:var(--text)" id="dPages">−</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="font-size:11.5px;color:var(--t2)">Anotaciones</span><span style="font-size:11.5px;font-family:JetBrains Mono,monospace;color:var(--text)" id="dAnns">0</span></div>
+        </div>
+        <div class="ersec">
+          <div class="ersec-title">Estilo activo</div>
+          <div class="swrow" id="mainSwatches"></div>
+          <div style="display:flex;gap:5px;align-items:center;margin-top:7px">
+            <input type="color" id="mainColorPick" value="#000000" style="width:20px;height:20px;border:none;border-radius:50%;cursor:pointer;padding:0" oninput="setColorHex(this.value)">
+            <span style="font-size:10px;color:var(--t3)">Personalizado</span>
+          </div>
+          <div class="ctrlrow"><label>Tamaño</label><input type="range" min="6" max="120" value="14" id="szSlider" oninput="setSize(+this.value)"><span class="cval" id="szLbl">14px</span></div>
+          <div class="ctrlrow"><label>Espaciado</label><input type="range" min="-10" max="40" value="0" step="0.5" id="spSlider" oninput="setSpacing(+this.value)"><span class="cval" id="spLbl">0px</span></div>
+          <div class="ctrlrow"><label>Grosor</label><input type="range" min="0.5" max="20" value="2" step="0.5" id="swSlider" oninput="setStroke(+this.value)"><span class="cval" id="swLbl">2px</span></div>
+          <div class="ctrlrow"><label>Opacidad</label><input type="range" min="5" max="100" value="100" id="opSlider" oninput="setOpacity(+this.value)"><span class="cval" id="opLbl">100%</span></div>
+          <div class="ctrlrow"><label>Relleno</label><input type="range" min="0" max="100" value="0" id="fillSlider" oninput="setFill(+this.value)"><span class="cval" id="fillLbl">0%</span></div>
+          <div class="ersec-title" style="margin-top:10px">Fuente</div>
+          <select class="fsel" id="fontSel" onchange="annFont=this.value"><option>Inter</option><option>Arial</option><option>Times New Roman</option><option>Courier New</option><option>Georgia</option><option>Verdana</option></select>
+          <div style="display:flex;gap:5px;margin-top:6px">
+            <button style="flex:1;padding:7px;border-radius:6px;border:1.5px solid var(--bdr);background:var(--s2);color:var(--t2);cursor:pointer;font-size:13px;font-weight:800" id="fbBold" onclick="toggleBold()">N</button>
+            <button style="flex:1;padding:7px;border-radius:6px;border:1.5px solid var(--bdr);background:var(--s2);color:var(--t2);cursor:pointer;font-size:13px;font-style:italic" id="fbItalic" onclick="toggleItalic()">I</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAGES tab -->
+      <div id="etab-pages" class="hidden">
+        <div class="ersec">
+          <div class="ersec-title">Gestión de Páginas</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px">
+            <button class="expbtn" style="margin:0" onclick="pmAddBlankPage()">+ Agregar</button>
+            <button class="expbtn" style="margin:0" onclick="pmDuplicatePage()">Duplicar</button>
+            <button class="expbtn" style="margin:0" onclick="pmMovePage(-1)">↑ Subir</button>
+            <button class="expbtn" style="margin:0" onclick="pmMovePage(1)">↓ Bajar</button>
+          </div>
+          <button class="expbtn" style="border-color:var(--err);color:var(--err)" onclick="pmDeletePage()">🗑 Eliminar página actual</button>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:10px" id="thumbGrid"></div>
+      </div>
+
+      <!-- SIGS tab -->
+      <div id="etab-sigs" class="hidden">
+        <div class="sello-panel">
+          <div class="ersec-title">Sello de Recepción (UTC)</div>
+          <div class="sello-preview-box" id="selloPreview">
+            <img src="" id="selloLogoImg" alt="CORPAC" style="max-width:100%;height:28px;object-fit:contain;display:block;margin:0 auto 4px">
+            <div style="height:1px;background:rgba(180,0,0,.3);margin:3px 0 5px"></div>
+            <div style="font-size:11px;color:#c00000;font-weight:800;text-transform:uppercase">RECIBIDO / RECEIVED</div>
+            <div id="selloTimestamp" style="font-size:10px;color:#c00000;font-weight:700;font-family:JetBrains Mono,monospace;margin:2px 0"></div>
+            <div style="font-size:9px;color:#333;font-weight:700">AIS/ARO – CORPAC S.A.</div>
+            <div id="selloSedeName" style="font-size:8px;color:#555;font-weight:600;margin-top:1px"></div>
+          </div>
+          <button class="drive-save-btn" style="margin-bottom:0" onclick="placeSelloRecepcion()">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            Colocar Sello de Recepción
+          </button>
+        </div>
+        <div class="ersec">
+          <div class="ersec-title" style="display:flex;align-items:center;justify-content:space-between">Sellos Personales del Personal <button class="btn btn-ghost btn-xs" onclick="openESigModal()" title="Dibujar firma">✍️ Firmar</button></div>
+          <div id="sigLibGrid" class="sig-lib-grid" style="padding:0"></div>
+        </div>
+      </div>
+
+      <!-- EXPORT tab -->
+      <div id="etab-export" class="hidden">
+        <div class="ersec">
+          <div class="ersec-title">Guardar en Google Drive</div>
+          <button class="drive-save-btn" onclick="saveToDrive()">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"/></svg>
+            Guardar en Google Drive
+            <span class="drive-path" id="drivePathLabel">FPL2026 / Junio</span>
+          </button>
+          <div class="ersec-title" style="margin-top:6px">Exportar</div>
+          <button class="expbtn" onclick="exportPDF()"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>PDF anotado<span class="expext">.pdf</span></button>
+          <button class="expbtn" onclick="exportWord()"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>Word<span class="expext">.docx</span></button>
+          <button class="expbtn" onclick="exportExcel()"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>Excel<span class="expext">.xlsx</span></button>
+          <button class="expbtn" onclick="doPrint()"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.7" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>Imprimir<span class="expext">Ctrl+P</span></button>
+        </div>
+      </div>
+
+      <!-- USER tab -->
+      <!-- ── TTS READER PANEL ── -->
+      <!-- ── AERO DECODER PANEL ── -->
+      <div id="etab-aero" class="hidden" style="display:flex;flex-direction:column;height:100%;padding:0;overflow:hidden">
+        <div style="padding:12px 14px 8px;border-bottom:1px solid var(--bdr);flex-shrink:0">
+          <div style="font-size:13px;font-weight:700;margin-bottom:1px">✈️ Decodificador Aeronáutico</div>
+          <div style="font-size:11px;color:var(--t3)">NOTAM · TAF · METAR · FPL · AIP · MET</div>
+        </div>
+        <!-- Input -->
+        <div style="padding:10px 12px;border-bottom:1px solid var(--bdr);flex-shrink:0">
+          <div style="display:flex;gap:6px;margin-bottom:6px">
+            <select id="aeroType" style="flex:1;background:var(--s2);border:1px solid var(--bdr);border-radius:5px;color:var(--text);padding:4px 8px;font-size:12px">
+              <option value="auto">🔍 Detectar automáticamente</option>
+              <option value="notam">NOTAM</option>
+              <option value="taf">TAF</option>
+              <option value="metar">METAR / SPECI</option>
+              <option value="fpl">FPL (Plan de Vuelo)</option>
+              <option value="aip">AIP / SNOWTAM / BIRDTAM</option>
+              <option value="sigmet">SIGMET / AIRMET / PIREP</option>
+              <option value="atis">ATIS / VOLMET</option>
+              <option value="acft">Código ICAO Aeronave</option>
+            </select>
+            <button class="btn btn-primary btn-sm" onclick="aeroDecode()" style="flex-shrink:0;font-size:12px">Decodificar</button>
+          </div>
+          <textarea id="aeroInput" class="f-input" rows="5" style="font-size:11.5px;font-family:JetBrains Mono,monospace;resize:vertical;line-height:1.5" placeholder="Pega aquí el mensaje aeronáutico...&#10;&#10;Ej: NOTAM Q)SPHI/QMXLC/IV/BO/A/000/999/0641S07946W005&#10;TAF SPHI 071700Z 0718/0818 08012KT...&#10;(FPL-LAN123-IS-B738/M-SGHIRO/S-SPHI1000-0100-SPIM0200-N-E/1234)"></textarea>
+          <div style="display:flex;gap:6px;margin-top:6px">
+            <button class="btn btn-ghost btn-xs" onclick="aeroFromPDF()" style="font-size:11px">📄 Extraer del PDF</button>
+            <button class="btn btn-ghost btn-xs" onclick="aeroFromClipboard()" style="font-size:11px">📋 Pegar</button>
+            <button class="btn btn-ghost btn-xs" onclick="aeroClear()" style="font-size:11px;color:var(--err)">✕ Limpiar</button>
+          </div>
+        </div>
+        <!-- Output -->
+        <div style="flex:1;overflow-y:auto;padding:10px 12px" id="aeroOutput">
+          <div style="color:var(--t3);font-size:12px;text-align:center;padding:20px">
+            Ingresa un mensaje aeronáutico y presiona <strong>Decodificar</strong>
+          </div>
+        </div>
+      </div>
+      <div id="etab-tts" class="hidden" style="padding:0;display:flex;flex-direction:column;height:100%">
+        <div style="padding:14px 16px 10px;border-bottom:1px solid var(--bdr)">
+          <div style="font-size:13px;font-weight:700;margin-bottom:2px">🔊 Lector de Voz</div>
+          <div style="font-size:11px;color:var(--t3)">Lee el contenido del PDF en voz alta</div>
+        </div>
+        <!-- Controles de voz -->
+        <div style="padding:12px 14px;border-bottom:1px solid var(--bdr);display:flex;flex-direction:column;gap:10px">
+          <div class="f-group">
+            <label class="f-label">Voz / Idioma</label>
+            <select class="f-select" id="ttsVoiceSelect" style="font-size:12px"></select>
+          </div>
+          <div class="f-group">
+            <label class="f-label" style="display:flex;justify-content:space-between">
+              <span>Velocidad</span><span id="ttsRateVal" style="color:var(--acc);font-weight:600">1.0×</span>
+            </label>
+            <input type="range" id="ttsRate" min="0.5" max="2" step="0.1" value="1"
+              style="width:100%;accent-color:var(--acc)"
+              oninput="document.getElementById('ttsRateVal').textContent=parseFloat(this.value).toFixed(1)+'×'">
+          </div>
+          <div class="f-group">
+            <label class="f-label" style="display:flex;justify-content:space-between">
+              <span>Tono</span><span id="ttsPitchVal" style="color:var(--acc);font-weight:600">1.0</span>
+            </label>
+            <input type="range" id="ttsPitch" min="0.5" max="2" step="0.1" value="1"
+              style="width:100%;accent-color:var(--acc)"
+              oninput="document.getElementById('ttsPitchVal').textContent=parseFloat(this.value).toFixed(1)">
+          </div>
+          <div class="f-group">
+            <label class="f-label" style="display:flex;justify-content:space-between">
+              <span>Volumen</span><span id="ttsVolVal" style="color:var(--acc);font-weight:600">100%</span>
+            </label>
+            <input type="range" id="ttsVol" min="0" max="1" step="0.05" value="1"
+              style="width:100%;accent-color:var(--acc)"
+              oninput="document.getElementById('ttsVolVal').textContent=Math.round(this.value*100)+'%'">
+          </div>
+        </div>
+        <!-- Selección de páginas -->
+        <div style="padding:10px 14px;border-bottom:1px solid var(--bdr);display:flex;flex-direction:column;gap:8px">
+          <div class="f-group">
+            <label class="f-label">Páginas a leer</label>
+            <div style="display:flex;gap:6px;align-items:center">
+              <label style="display:flex;align-items:center;gap:4px;font-size:12px;cursor:pointer">
+                <input type="radio" name="ttsPages" value="all" checked id="ttsPgAll" style="accent-color:var(--acc)"> Todas
+              </label>
+              <label style="display:flex;align-items:center;gap:4px;font-size:12px;cursor:pointer">
+                <input type="radio" name="ttsPages" value="current" id="ttsPgCur" style="accent-color:var(--acc)"> Página actual
+              </label>
+              <label style="display:flex;align-items:center;gap:4px;font-size:12px;cursor:pointer">
+                <input type="radio" name="ttsPages" value="range" id="ttsPgRange" style="accent-color:var(--acc)"> Rango
+              </label>
+            </div>
+          </div>
+          <div id="ttsPgRangeBox" style="display:none;display:flex;gap:6px;align-items:center">
+            <input class="f-input" type="number" id="ttsPgFrom" placeholder="Desde" min="1" style="width:70px;font-size:12px;padding:5px 8px">
+            <span style="color:var(--t3);font-size:12px">–</span>
+            <input class="f-input" type="number" id="ttsPgTo" placeholder="Hasta" min="1" style="width:70px;font-size:12px;padding:5px 8px">
+          </div>
+        </div>
+        <!-- Botones de control -->
+        <div style="padding:12px 14px;display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-primary" style="flex:2;gap:6px;display:flex;align-items:center;justify-content:center" onclick="ttsPlay()" id="ttsPlayBtn">
+            <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg> Leer
+          </button>
+          <button class="btn btn-ghost" style="flex:1" onclick="ttsPause()" id="ttsPauseBtn" disabled>⏸</button>
+          <button class="btn btn-ghost" style="flex:1" onclick="ttsStop()" id="ttsStopBtn" disabled>⏹</button>
+        </div>
+        <!-- Progreso -->
+        <div style="padding:0 14px 12px">
+          <div style="background:var(--s2);border-radius:var(--r);padding:10px 12px;font-size:11.5px">
+            <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+              <span style="color:var(--t3)">Progreso</span>
+              <span id="ttsProgress" style="color:var(--acc);font-weight:600;font-family:JetBrains Mono,monospace">–</span>
+            </div>
+            <div style="background:var(--s3);border-radius:4px;height:4px;overflow:hidden">
+              <div id="ttsProgressBar" style="background:var(--acc);height:4px;width:0%;transition:width .3s"></div>
+            </div>
+            <div id="ttsCurrentText" style="margin-top:8px;font-size:11px;color:var(--t2);line-height:1.5;max-height:60px;overflow:hidden;font-style:italic"></div>
+          </div>
+        </div>
+        <!-- Texto manual -->
+        <div style="padding:0 14px 14px;flex:1;display:flex;flex-direction:column;gap:8px">
+          <div style="font-size:11.5px;font-weight:600;color:var(--t2)">O escribe / pega texto:</div>
+          <textarea id="ttsManualText" class="f-input" rows="5" style="resize:vertical;font-size:12px;flex:1" placeholder="Escribe aquí el texto que deseas escuchar..."></textarea>
+          <button class="btn btn-ghost btn-sm" onclick="ttsReadManual()">🔊 Leer texto escrito</button>
+        </div>
+      </div>
+      <div id="etab-user" class="hidden">
+        <div class="ersec">
+          <div class="ersec-title">Mi Cuenta</div>
+          <div id="userInfoPanel"></div>
+        </div>
+        <div class="chpass-form">
+          <div class="ersec-title">Cambiar Contraseña</div>
+          <div class="f-group"><label class="f-label">Contraseña Actual</label><input class="f-input" id="cpOld" type="password" style="font-size:12px;padding:7px 10px"></div>
+          <div class="f-group"><label class="f-label">Nueva Contraseña</label><input class="f-input" id="cpNew" type="password" style="font-size:12px;padding:7px 10px"></div>
+          <div class="f-group"><label class="f-label">Confirmar</label><input class="f-input" id="cpNew2" type="password" style="font-size:12px;padding:7px 10px"></div>
+          <button class="btn btn-warn btn-sm btn-full" onclick="changeUserPass()">Cambiar Contraseña</button>
+        </div>
+        <div class="ersec">
+          <button class="btn btn-ghost btn-sm btn-full" onclick="logoutAll()">← Cerrar Sesión</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Status bar -->
+  <div class="estatusbar">
+    <div class="sbitem"><div class="sbdot" id="sbDot"></div><span id="sbStatus">Sin documento</span></div>
+    <div class="sbitem" id="sbPage"></div>
+    <div class="sbitem" id="sbZoom"></div>
+    <div class="sbitem" id="sbTool"></div>
+    <div class="sbitem" style="margin-left:auto" id="sbClock"></div>
+  </div>
+</div>
+
+<!-- Mobile bottom toolbar -->
+<div id="mobToolbar">
+  <div class="mtb-inner">
+    <button class="mtb-btn on" id="mtb-cursor" onclick="setTool('cursor');setMtbOn('cursor')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3l14 9-7 1-3 7L5 3z"/></svg><span>Selec.</span></button>
+    <button class="mtb-btn" id="mtb-textbox" onclick="setTool('textbox');setMtbOn('textbox')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><rect x="3" y="5" width="18" height="14" rx="2" stroke-width="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 9h10M7 12h6"/></svg><span>Cuadro</span></button>
+    <button class="mtb-btn" id="mtb-text" onclick="setTool('text');setMtbOn('text')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/></svg><span>Texto</span></button>
+    <button class="mtb-btn" id="mtb-highlight" onclick="setTool('highlight');setMtbOn('highlight')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg><span>Resalt.</span></button>
+    <button class="mtb-btn" id="mtb-draw" onclick="setTool('draw');setMtbOn('draw')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z"/></svg><span>Lápiz</span></button>
+    <div class="mtb-sep"></div>
+    <button class="mtb-btn" onclick="placeSelloRecepcion()"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><span>Sello</span></button>
+    <button class="mtb-btn" onclick="openMobPanel('style')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="9" stroke-width="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3"/></svg><span>Estilo</span></button>
+    <button class="mtb-btn" onclick="openMobPanel('sigs')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg><span>Firmas</span></button>
+    <button class="mtb-btn" onclick="openMobPanel('menu')"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg><span>Más</span></button>
+  </div>
+</div>
+
+<!-- Mobile slide panel -->
+<div id="mobPanelOverlay" onclick="closeMobPanel()"></div>
+<div id="mobPanel">
+  <div class="mp-handle"></div>
+  <button class="mp-x" onclick="closeMobPanel()">✕</button>
+  <div id="mpStyle" class="mp-section" style="display:none">
+    <div class="mp-title">🎨 Estilo</div>
+    <div class="mob-color-grid" id="mobColorGrid"></div>
+    <div class="mob-ctrl"><div class="mob-ctrl-row"><span class="mob-ctrl-lbl">Tamaño</span><span class="mob-ctrl-val" id="mobSzVal">14px</span></div><input class="mob-slider" type="range" min="6" max="120" value="14" id="mobSzSl" oninput="setSize(+this.value)"></div>
+    <div class="mob-ctrl"><div class="mob-ctrl-row"><span class="mob-ctrl-lbl">Opacidad</span><span class="mob-ctrl-val" id="mobOpVal">100%</span></div><input class="mob-slider" type="range" min="5" max="100" value="100" id="mobOpSl" oninput="setOpacity(+this.value)"></div>
+  </div>
+  <div id="mpSigs" class="mp-section" style="display:none">
+    <div class="mp-title">✍ Firmas y Sellos</div>
+    <button class="mob-action-btn pri" onclick="placeSelloRecepcion();closeMobPanel()">⏱ Colocar Sello Recepción</button>
+    <div class="mp-title" style="margin-top:4px">Sellos personales</div>
+    <div id="mobSigGrid" style="display:flex;flex-direction:column;gap:8px"></div>
+  </div>
+  <div id="mpMenu" class="mp-section" style="display:none">
+    <div class="mp-title">☰ Opciones</div>
+    <button class="mob-action-btn sec" onclick="document.getElementById('fInput').click();closeMobPanel()">📂 Abrir PDF</button>
+    <button class="mob-action-btn sec" onclick="saveToDrive();closeMobPanel()">☁️ Guardar en Drive</button>
+    <button class="mob-action-btn sec" onclick="exportPDF();closeMobPanel()">💾 Guardar PDF</button>
+    <button class="mob-action-btn sec" onclick="doPrint();closeMobPanel()">🖨 Imprimir</button>
+    <button class="mob-action-btn sec" onclick="doUndo();closeMobPanel()">↩ Deshacer</button>
+    <button class="mob-action-btn danger" onclick="logoutAll();closeMobPanel()">← Cerrar Sesión</button>
+  </div>
+</div>
+
+<!-- Stamp modal -->
+<div class="modal-overlay" id="stampModal">
+  <div class="modal-box" style="max-width:400px" onclick="event.stopPropagation()">
+    <div class="modal-hd"><div class="modal-hd-title">🔖 Colocar Sello</div><button class="modal-hd-x" onclick="closeModal('stampModal')">✕</button></div>
+    <div class="modal-body">
+      <div id="stampGrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px"></div>
+      <div style="display:flex;gap:8px">
+        <input class="f-input" id="customStampTxt" placeholder="Texto personalizado…" style="flex:1;font-size:12px;padding:8px 10px">
+        <button class="btn btn-primary btn-sm" onclick="applyCustomStamp()">Aplicar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Context menu -->
+<div class="ctx-menu" id="ctxMenu">
+  <div class="ctx-item" id="ctxEditItem" onclick="ctxEdit()">✏️ Editar</div>
+  <div class="ctx-item" onclick="ctxDuplicate()">📋 Duplicar</div>
+  <div class="ctx-item" onclick="ctxBringFront()">⬆ Al frente</div>
+  <div class="ctx-item" onclick="ctxSendBack()">⬇ Atrás</div>
+  <div class="ctx-sep"></div>
+  <div class="ctx-item danger" onclick="ctxDelete()">🗑 Eliminar</div>
+</div>
+
+<input id="annInput" type="text" placeholder="Escribe y pulsa Enter…" autocomplete="off" spellcheck="false">
+<div id="inpHint">↵ confirma · Esc cancela</div>
+<input type="file" id="fInput" accept=".pdf" style="display:none" onchange="onFileChosen(this)">
+<input type="file" id="sigUploadInput" accept="image/*" multiple style="display:none" onchange="onSigUpload(this)">
+<div class="prog" id="prog"><div class="prog-fill" id="progFill"></div></div>
+<div class="toast" id="toast"></div>
+
+
+
+
+<script>
+// Lazy module loader — loads aero.js and admin.js on demand
+window._lazyModules={};
+window._loadModule=function(name){
+  if(window._lazyModules[name])return Promise.resolve();
+  return new Promise(function(resolve,reject){
+    var s=document.createElement('script');
+    s.src=name+'.js';
+    s.onload=function(){window._lazyModules[name]=true;resolve();};
+    s.onerror=function(){reject(new Error('Failed to load '+name));};
+    document.head.appendChild(s);
+  });
+};
+</script>
+
+
+
+<!-- Para selection rect -->
+<div id="paraSelRect"></div>
+
+<!-- Paragraph Editor Modal -->
+<div id="paraEditModal">
+  <!-- Header -->
+  <div class="pe-head">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="width:32px;height:32px;background:rgba(79,142,247,.2);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px">✏️</div>
+      <div>
+        <div style="font-size:13.5px;font-weight:700;color:#e8eaf6">Editor de Párrafo</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:1px" id="peInfo">Selecciona una zona para editar</div>
+      </div>
+    </div>
+    <button onclick="closeParagraphEditor(false)" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;color:rgba(255,255,255,.5);font-size:15px;cursor:pointer;width:30px;height:30px;display:flex;align-items:center;justify-content:center">✕</button>
+  </div>
+  <!-- Toolbar -->
+  <div class="pe-toolbar">
+    <select id="peFontFamily" onchange="peUpdatePreview()" style="max-width:140px">
+      <option value="Arial,sans-serif">Arial</option>
+      <option value="'Times New Roman',serif">Times New Roman</option>
+      <option value="Georgia,serif">Georgia</option>
+      <option value="Verdana,sans-serif">Verdana</option>
+      <option value="Calibri,sans-serif">Calibri</option>
+      <option value="'Courier New',monospace">Courier New</option>
+      <option value="sans-serif">Sans-serif</option>
+      <option value="serif">Serif</option>
+    </select>
+    <input type="number" id="peFontSize" min="4" max="120" value="11" onchange="peUpdatePreview()" style="width:56px">
+    <span style="font-size:11px;color:rgba(255,255,255,.3)">px</span>
+    <div style="width:1px;height:20px;background:rgba(255,255,255,.1);margin:0 2px"></div>
+    <button class="pe-teb" id="peBold" onclick="peToggle('bold')" style="font-weight:bold;font-size:13px">B</button>
+    <button class="pe-teb" id="peItalic" onclick="peToggle('italic')" style="font-style:italic;font-size:13px">I</button>
+    <button class="pe-teb" id="peUnder" onclick="peToggle('under')" style="text-decoration:underline;font-size:13px">U</button>
+    <div style="width:1px;height:20px;background:rgba(255,255,255,.1);margin:0 2px"></div>
+    <div style="display:flex;align-items:center;gap:4px">
+      <span style="font-size:10px;color:rgba(255,255,255,.35)">A</span>
+      <input type="color" id="peColor" value="#000000" onchange="peUpdatePreview()" title="Color de texto">
+    </div>
+    <div style="display:flex;align-items:center;gap:4px">
+      <span style="font-size:10px;color:rgba(255,255,255,.35)">Fondo</span>
+      <input type="color" id="peBgColor" value="#ffffff" onchange="peUpdatePreview()" title="Color de fondo">
+    </div>
+    <div style="width:1px;height:20px;background:rgba(255,255,255,.1);margin:0 2px"></div>
+    <select id="peAlign" onchange="peUpdatePreview()">
+      <option value="left">⬅ Izq.</option>
+      <option value="center">↔ Centro</option>
+      <option value="right">➡ Der.</option>
+      <option value="justify">☰ Just.</option>
+    </select>
+    <select id="peLineHeight" onchange="peUpdatePreview()">
+      <option value="1">× 1.0</option>
+      <option value="1.2">× 1.2</option>
+      <option value="1.5" selected>× 1.5</option>
+      <option value="2">× 2.0</option>
+    </select>
+  </div>
+  <!-- Body -->
+  <div class="pe-body">
+    <div class="pe-col" style="flex:1.1">
+      <label>📝 Texto a aplicar</label>
+      <textarea class="pe-editor" id="peText" oninput="peUpdatePreview()" spellcheck="true" placeholder="Escribe o edita el texto aquí..."></textarea>
+    </div>
+    <div class="pe-col" style="flex:1">
+      <label>👁 Vista previa sobre PDF</label>
+      <div class="pe-preview-wrap" id="pePreviewWrap">
+        <canvas id="pePreviewCanvas" class="pe-preview-canvas"></canvas>
+      </div>
+    </div>
+  </div>
+  <!-- Footer -->
+  <div class="pe-foot">
+    <button class="btn btn-ghost" style="color:rgba(255,255,255,.5)" onclick="closeParagraphEditor(false)">Cancelar</button>
+    <button class="btn" style="background:rgba(240,80,80,.15);color:#ff6b6b;border:1px solid rgba(240,80,80,.3)" onclick="peClearZone()">🗑 Borrar zona</button>
+    <button class="btn btn-primary" style="min-width:140px;font-weight:700" onclick="closeParagraphEditor(true)">✓ Aplicar al PDF</button>
+  </div>
+</div>
+
+<!-- Text Edit Modal -->
+<div id="textEditModal" class="text-edit-modal" style="display:none">
+  <div style="font-size:12.5px;font-weight:700;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center">
+    <span>✏️ Editar texto</span>
+    <button onclick="closeTextEdit(false)" style="background:none;border:none;color:var(--t3);font-size:16px;cursor:pointer">✕</button>
+  </div>
+  <div class="text-edit-toolbar">
+    <select id="teFontFamily" onchange="tePreview()" style="max-width:140px;background:var(--s2);border:1px solid var(--bdr);border-radius:5px;color:var(--text);padding:3px 6px;font-size:12px">
+      <option value="sans-serif">Sans-serif</option><option value="serif">Serif</option>
+      <option value="'Courier New',monospace">Monospace</option><option value="Arial,sans-serif">Arial</option>
+      <option value="'Times New Roman',serif">Times New Roman</option><option value="Georgia,serif">Georgia</option>
+      <option value="Verdana,sans-serif">Verdana</option><option value="Calibri,sans-serif">Calibri</option>
+    </select>
+    <input type="number" id="teFontSize" min="4" max="200" value="12" onchange="tePreview()" style="width:52px;background:var(--s2);border:1px solid var(--bdr);border-radius:5px;color:var(--text);padding:3px 6px;font-size:12px">
+    <span style="font-size:11px;color:var(--t3)">px</span>
+    <button class="teb" id="teBold" onclick="teToggle('bold')" title="Negrita" style="font-weight:bold">B</button>
+    <button class="teb" id="teItalic" onclick="teToggle('italic')" title="Cursiva" style="font-style:italic">I</button>
+    <button class="teb" id="teUnder" onclick="teToggle('under')" title="Subrayado" style="text-decoration:underline">U</button>
+    <input type="color" id="teColor" value="#000000" onchange="tePreview()" title="Color de texto" style="width:28px;height:26px;padding:1px;border-radius:5px;cursor:pointer;border:1px solid var(--bdr)">
+  </div>
+  <textarea id="teText" rows="5" oninput="tePreview()" style="width:100%;box-sizing:border-box;background:var(--s2);border:1px solid var(--bdr);border-radius:6px;color:var(--text);padding:8px;resize:vertical;font-size:13px;margin-bottom:4px"></textarea>
+  <div id="tePreviewBox" style="background:rgba(255,255,255,.05);border:1px dashed var(--bdr);border-radius:5px;padding:6px 10px;min-height:28px;margin-bottom:10px;font-size:13px;word-break:break-word"></div>
+  <div style="display:flex;gap:8px">
+    <button class="btn btn-ghost" style="flex:1" onclick="closeTextEdit(false)">Cancelar</button>
+    <button class="btn" style="flex:1;background:rgba(240,80,80,.12);color:var(--err);border:1px solid rgba(240,80,80,.25)" onclick="deleteTextSpan()">🗑 Borrar</button>
+    <button class="btn btn-primary" style="flex:2" onclick="closeTextEdit(true)">✓ Aplicar</button>
+  </div>
+</div>
+<script src="app.min.js?v=1784145501946"></script>
+<script>
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('./sw.js').catch(function(e){console.warn('SW failed',e);});
+}
+</script>
+</body>
+</html>
